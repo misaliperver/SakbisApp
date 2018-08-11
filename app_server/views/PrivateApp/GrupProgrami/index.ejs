@@ -1,0 +1,13 @@
+<div class="container">
+    <div class="row">   
+        <a>Buraya listesine kayıt olduğun grublar listelenecek.</a>
+        <a class="btn btn-succesfull" href="/userApp/grup/olustur">Yeni Grub Oluştur</a>
+        <ul class="list-group">
+        <% if(typeof gruplar !== 'undefined'){%>
+            <% gruplar.forEach(function(grup) { %>
+                <li class="list-group-item"><a class="text-primary"><%= grup.programId %> </a><a class="text-danger"><%= grup.title %> <%= grup.issue %></a></li>
+            <% }); %>
+        <% }%>
+        </ul>
+    </div>
+</div>
