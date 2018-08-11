@@ -5,17 +5,17 @@ var passport = require('passport');
 
 module.exports.get_dersProgramiEkle = function(req, res){
     res.render('PrivateApp/dersprogramiEkle');
-        
+
 }
 module.exports.get_Ajax_dersProgramiEkle = function(req, res){
-    Matris.findOne({username: req.user.username}, function (err, dersProgrami) { 
+    Matris.findOne({username: req.user.username}, function (err, dersProgrami) {
         if(err) throw err;
         if(dersProgrami){
             res.json({dersProgrami: dersProgrami.matris});
         }else{
             res.json({dersProgrami: null});
         }
-    });        
+    });
 }
 
 module.exports.put_Ajax_dersProgramiEkle = function(req, res){
@@ -25,7 +25,7 @@ module.exports.put_Ajax_dersProgramiEkle = function(req, res){
     var date = Date.now();
 
     var msg = "";
-        Matris.findOne({username: username}, function (err, dersProgrami) { 
+        Matris.findOne({username: username}, function (err, dersProgrami) {
             if(dersProgrami){
                 Matris.findOneAndUpdate({username: username}, {
                     matris: matris,
@@ -33,7 +33,7 @@ module.exports.put_Ajax_dersProgramiEkle = function(req, res){
                     username: username,
                     date: date
                   }, function(err, rawResponse) {
-                    if (err){ msg= 'Güncellenemedi';  throw err;} 
+                    if (err){ msg= 'Güncellenemedi';  throw err;}
                     else {msg= 'Güncelleme başarılı'; }
                     res.json({msg});
                  });
@@ -45,13 +45,13 @@ module.exports.put_Ajax_dersProgramiEkle = function(req, res){
                     date: date
                 });
                 Matris.createDersProgrami(newDersProgrami, function (err, callbackDersProgrami) {
-                    if (err){ msg = 'Yenisi oluşturululamadı'; throw err; }  
+                    if (err){ msg = 'Yenisi oluşturululamadı'; throw err; }
                     else {msg= 'Yeni kayıt oluşturuldu.'; }
                 });
                 res.json({msg});
             }
         });
-        
+
 }
 
 module.exports.get_profil = function(req, res){
@@ -64,18 +64,18 @@ module.exports.get_ikiKisilikKarsilastirma = function(req,res){
     var saat = 17 - parseInt(req.body.saat); // 17-n
     var seMatris;
     var myMatris;
-    Matris.findOne({username: searchUsername}, function (err, seDersProgrami) { 
+    Matris.findOne({username: searchUsername}, function (err, seDersProgrami) {
         if(err) throw err;
         if(seDersProgrami){
-            Matris.findOne({username: req.user.username}, function (err, myDersProgrami) { 
+            Matris.findOne({username: req.user.username}, function (err, myDersProgrami) {
                 if(err) throw err;
                 if(myDersProgrami){
                     for(var i=0; i<5; i++){
-                        for(var j=0; j<saat; j++){ 
+                        for(var j=0; j<saat; j++){
                             myMatris =   myDersProgrami[i][j] && myDersProgrami[i][j+1];
-                            seMatris =   seDersProgrami[i][j] && seDersProgrami[i][j+1];              
+                            seMatris =   seDersProgrami[i][j] && seDersProgrami[i][j+1];
                         }
-                    }  
+                    }
                 }else{
                     console.log('Senin kayıtlı bir ders programın yok.')
                 }
@@ -83,8 +83,8 @@ module.exports.get_ikiKisilikKarsilastirma = function(req,res){
         }else{
             console.log('Aradığın kişinin kayıtlı bir ders programı yok. ')
         }
-    }); 
-   
+    });
+
 }
 */
 
@@ -143,7 +143,7 @@ module.exports.get_dersProgramGrubIndex = function(req, res){
     Grup.getGrupByUsername(username, function(err, grup){
         res.render('PrivateApp/GrupProgrami/index',{gruplar: grup});
     })
-   
+
 }
 
 var randomstring = require("randomstring");
@@ -167,10 +167,10 @@ module.exports.post_dersProgramGrubOlustur = function(req, res){
     req.checkBody('issue', 'Açıklama kısmı boş bırakılmamalıdır.').notEmpty();
     req.checkBody('startTime', 'startTime kısmı boş bırakılmamalıdır.').notEmpty();
     req.checkBody('finishTime', 'finishTime kısmı boş bırakılmamalıdır.').notEmpty();
-   
+
     var hatalar = req.validationErrors();
     var interval=0;
-    try{interval = parseInt(req.body.interval);  if(isNaN(interval)) hatalar.push({param:'interval',msg:'Uygun aralık değeri seçiniz.', value:''})}catch(err){ 
+    try{interval = parseInt(req.body.interval);  if(isNaN(interval)) hatalar.push({param:'interval',msg:'Uygun aralık değeri seçiniz.', value:''})}catch(err){
         hatalar.push({param:'interval',msg:'Uygun aralık değeri seçiniz.', value:''})
     }
     if(interval>11 || interval<1) hatalar.push({param:'interval',msg:'Uygun aralık değeri seçiniz.', value:''})
@@ -185,9 +185,10 @@ module.exports.post_dersProgramGrubOlustur = function(req, res){
             date: fbugun.substring(0,16)
 		});
     }
+    /deegisim
     else{
         var programID = username + "-" + randomstring.generate(16);
-        Grup.findOne({programId: programID}, function (err, grupProgrami) { 
+        Grup.findOne({programId: programID}, function (err, grupProgrami) {
             if(grupProgrami){
               console.log('cakisma var yandık.');
             }else{
@@ -201,10 +202,10 @@ module.exports.post_dersProgramGrubOlustur = function(req, res){
                     people: people,
                     interval:interval,
                     secret: secret
-                    
+
                 });
                 Grup.createGrupProgrami(newGrupProgrami, function (err, callbackGrupProgrami) {
-                    if (err){ msg = 'Yenisi oluşturululamadı'; throw err; }  
+                    if (err){ msg = 'Yenisi oluşturululamadı'; throw err; }
                     else {msg= 'Yeni kayıt oluşturuldu.'; }
                 });
                 res.redirect('/userApp/grup');
