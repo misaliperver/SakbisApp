@@ -1,13 +1,25 @@
 <div class="container">
-    <div class="row">   
-        <a>Buraya listesine kayıt olduğun grublar listelenecek.</a>
-        <a class="btn btn-succesfull" href="/userApp/grup/olustur">Yeni Grub Oluştur</a>
-        <ul class="list-group">
-        <% if(typeof gruplar !== 'undefined'){%>
-            <% gruplar.forEach(function(grup) { %>
-                <li class="list-group-item"><a class="text-primary"><%= grup.programId %> </a><a class="text-danger"><%= grup.title %> <%= grup.issue %></a></li>
-            <% }); %>
+    <div class="row mb-3">
+        <% if(typeof gruplar !== 'undefined'){%>   
+         <a>Burada sizin oluşturduğunuz gruplar listelendi. Yenisini oluşturmak ister misin?</a>
+        <% }else{%>
+         <a>Oluşturmuş olduğun bir grup yok. Hemen oluşturmak ister misin?</a>
         <% }%>
-        </ul>
+        <a class="btn btn-succesfull" href="/userApp/grup/olustur">Yeni Grub Oluştur</a> 
     </div>
+    <% if(typeof gruplar !== 'undefined'){%>
+        <% gruplar.forEach(function(grup) { %>
+            <div class="card mb-3">
+                <img class="card-img-top" src="/img/image-780x180.jpg" alt="Card image cap">
+                <div class="card-body">
+                    <span class="badge badge-pill badge-danger"><%= grup.interval%> saat için</span>
+                    <% if(grup.secret != false){%><span class="badge badge-pill badge-success ">Açık Link</span><% }else{%><span class="badge badge-pill badge-warning ">Gizli Link</span><% }%>
+                    <h5 class="card-title text-primary float-left"><%= grup.title%> &nbsp; &nbsp;</h5> 
+                    <a class="float-right text-success"><%= grup.startTime.getDay()%>/<%= grup.startTime.getMonth()%>/<%= grup.startTime.getFullYear()%> - <%= grup.finishTime.getDay()%>/<%= grup.finishTime.getMonth()%>/<%= grup.finishTime.getFullYear()%></a>
+                    <p class="card-text" style="clear: both;"><%= grup.issue%></p>
+                    <p class="card-text"><small class="text-muted">kimlik: <i><%= grup.programId%></i></small></p>
+                </div>
+            </div>
+        <% }); %>
+    <% }%>
 </div>

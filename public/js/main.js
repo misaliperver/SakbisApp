@@ -94,3 +94,50 @@ if(windowLoc === '/userApp/dersprogramiekle'){
  
     });
 }
+else if(windowLoc === '/userApp/Profil'){
+    $(document).ready(function(){
+        var matris = new Array();
+        function matrisKur(){
+            console.log('a');
+            matris[0] = new Array(false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false)
+            matris[1] = new Array(false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false)
+            matris[2] = new Array(false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false)
+            matris[3] = new Array(false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false)
+            matris[4] = new Array(false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false)
+            console.log('aaa');
+        }  
+
+       $.ajax({
+            url: '/userApp/dersprogramivarmi',
+            method: 'GET',
+            dataType: 'json',
+            success: function(response){
+               if(response.dersProgrami!==null){
+                    matris = response.dersProgrami;
+                    var line="";
+                    var index ="";
+                    for(var i=0; i<5; i++){
+                        for(var j=0; j<16; j++){ 
+                            if(j==10) index='A';
+                            else if(j==11) index='B';
+                            else if(j==12) index='C';
+                            else if(j==13) index='D';
+                            else if(j==14) index='E';
+                            else if(j==15) index='F';
+
+                            if(j<10) line = 't'+ j  + i;
+                            else line = 't'+ index + i;
+                            if(matris[i][j]===true)  
+                            $("#"+line).css("background-color", "yellow");
+                        }
+                    }
+               }else{
+                matrisKur();
+               }
+            },
+            error: function() {
+                alert("Server'la bağlantı kurulamadı!")
+            }
+        });
+    });
+}

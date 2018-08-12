@@ -56,6 +56,7 @@ module.exports.put_Ajax_dersProgramiEkle = function(req, res){
 
 module.exports.get_profil = function(req, res){
     res.render('PrivateApp/profil');
+    
 }
 
 /*
