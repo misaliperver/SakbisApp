@@ -46,7 +46,7 @@ module.exports.getUserById = function(id, callback){
 }
 
 module.exports.getUserBylimit = function(lim, callback){
-	User.find({},{ username: 1, ad: 1, soyad: 1  },callback).limit(lim);
+	User.find({},{ username: 1, ad: 1, soyad: 1  },callback).sort({_id:-1}).limit(lim);
 }
 
 module.exports.comparePassword = function(candidatePassword, hash, callback){

@@ -186,7 +186,6 @@ module.exports.post_dersProgramGrubOlustur = function(req, res){
             date: fbugun.substring(0,16)
 		});
     }
-    /deegisim
     else{
         var programID = username + "-" + randomstring.generate(16);
         Grup.findOne({programId: programID}, function (err, grupProgrami) {
