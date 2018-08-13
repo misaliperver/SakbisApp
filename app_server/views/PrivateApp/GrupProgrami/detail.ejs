@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="row">
+        <%if(typeof grup === 'undefined'){ %>
+        <div><%= hata%></div>
+        <%}else{ %>
+            <div class="card mb-3">
+                <img class="card-img-top" src="/img/image-780x180.jpg" alt="Card image cap">
+                <div class="card-img-overlay "><a class="float-right "><%= grup.startTime.getDay()%>/<%= grup.startTime.getMonth()%>/<%= grup.startTime.getFullYear()%> - <%= grup.finishTime.getDay()%>/<%= grup.finishTime.getMonth()%>/<%= grup.finishTime.getFullYear()%></a></div>
+                <div class="card-body">
+                    <span class="badge badge-pill badge-danger"><%= grup.interval%> saat için</span>
+                    <% if(grup.secret == false){%><span class="badge badge-pill badge-success ">Açık Link</span><% }else{%><span class="badge badge-pill badge-warning ">Gizli Link</span><% }%>
+                    <h5 class="card-title text-primary float-left"><%= grup.title%> &nbsp; &nbsp;</h5> 
+                   
+                    <p class="card-text" style="clear: both;"><%= grup.issue%></p>
+                    
+                </div>
+                <div class="card-footer">
+                    <p class="card-text"><small class="text-muted">kimlik: <i><%= grup.programId%></i></small></p>
+                </div>
+            </div>
+        <%}%>
+    </div>
+</div>
+    

@@ -213,3 +213,28 @@ module.exports.post_dersProgramGrubOlustur = function(req, res){
         });
     }
 }
+
+module.exports.get_dersProgramGrubIdIndex = function(req, res){
+    var programID = req.params.programID;
+    var username = req.user.username;
+    Grup.getGrupByProjectId(programID, function(err, grup){
+        if(err) throw err;
+        if(grup){ // Böyle bir grup varmı?
+            if(grup.secret == false){ // Herkese açıksa
+                res.render('PrivateApp/GrupProgrami/detail', {grup});
+            }else{ // Gizliyse açıksa
+                if(grup.from === username) res.render('PrivateApp/GrupProgrami/detail', {grup});
+                else{
+                    res.render('PrivateApp/GrupProgrami/detail',{hata: 'Bu gruba erişim izniniz yok.'});
+                } 
+            }            
+        }else{
+            res.render('PrivateApp/GrupProgrami/detail',{hata: "Böyle bir grup yok"});
+        }
+    })
+
+}
+
+
+
+
