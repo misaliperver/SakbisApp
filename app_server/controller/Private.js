@@ -73,8 +73,8 @@ module.exports.get_ikiKisilikKarsilastirma = function(req,res){
                 if(myDersProgrami){
                     for(var i=0; i<5; i++){
                         for(var j=0; j<saat; j++){
-                            myMatris =   myDersProgrami[i][j] && myDersProgrami[i][j+1];
-                            seMatris =   seDersProgrami[i][j] && seDersProgrami[i][j+1];
+                            myMatris =   myDersProgrami.matris[i][j] && myDersProgrami.matris[i][j+1];
+                            seMatris =   seDersProgrami.matris[i][j] && seDersProgrami.matris[i][j+1];
                         }
                     }
                 }else{
