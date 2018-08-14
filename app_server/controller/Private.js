@@ -56,7 +56,7 @@ module.exports.put_Ajax_dersProgramiEkle = function(req, res){
 
 module.exports.get_profil = function(req, res){
     res.render('PrivateApp/profil');
-    
+
 }
 
 /*
@@ -89,54 +89,72 @@ module.exports.get_ikiKisilikKarsilastirma = function(req,res){
 }
 */
 
+const getUser = async (query) => {
 
-module.exports.get_dersProgramiKarsilastir =function (req, res){
-    let dersprogramlari = new Array(10);
-    let sayac=0;
-    let saatler=new Array(5);
-    let denemedizisi=new Array(5);
-    for(let i=0;i<saatler.length;i++)
+
+  const grup= await Grup.findOne(query);
+    let dersprogramlariARRAY=new Array(grup.people.length);
+    let i=0;
+  for(const item of grup.people){
+    query = {username: item};
+  dersprogramlariARRAY[i] = await   Matris.findOne(query);
+  i++;
+ }
+
+
+  return { grup:grup, dersprogramlariARRAY:dersprogramlariARRAY };
+};
+module.exports.post_dersProgramGrubIdIndex =function (req, res){
+  let dersprogramlari;
+let sayac;
+let saatler;
+let denemedizisi;
+console.log(req.body);
+getUser({ programId: req.body.programId }).then((results)=>{
+dersprogramlari = new Array(results.grup.people.length);//grupdaki insanların sayısı kadar
+for(let i=0;i<results.grup.people.length;i++)
+{
+  dersprogramlari[i]=results.dersprogramlariARRAY[i].matris;
+}
+console.log(dersprogramlari[0].length);
+console.log(dersprogramlari[0][0].length);
+console.log(dersprogramlari.length);
+sayac=0;
+saatler=new Array(5);
+denemedizisi=new Array(5);//5  gün
+//return asenkronIslem3(sonuc2);
+for(let i=0;i<saatler.length;i++)
+{
+    saatler[i]=new Array(16);
+    denemedizisi[i]=new Array(16);//15 saaat
+    for(let j=0;j<denemedizisi[i].length;j++)
     {
-        saatler[i]=new Array(15);
-        denemedizisi[i]=new Array(15);
-        for(let j=0;j<denemedizisi[i].length;j++)
-        {
-            denemedizisi[i][j]=new Array(8);
+        saatler[i][j]=true;
+        denemedizisi[i][j]=new Array(results.grup.people.length);//insan sayısı
+    }
+}
+for (let i = 0; i < dersprogramlari[0].length; i++) {//5 gün sayisi
+    for(let j=0;j<dersprogramlari[0][0].length;j++){//16 saat sayisi
+        for(let k=0;k<dersprogramlari.length;k++){//2 kisi sayisi
+            if(dersprogramlari[k][i][j]){
+            sayac++;
+            denemedizisi[i][j][k]=k;
+            }
+           else{
+            denemedizisi[i][j][k]='$';
+          }
         }
+        saatler[i][j]=sayac;
+        sayac=0;
     }
 
-    for (let i = 0; i < dersprogramlari.length; i++) {
-        dersprogramlari[i] = new Array(5);
-        for(let j=0;j<dersprogramlari[i].length;j++)
-        {
-            dersprogramlari[i][j] = new Array(15);
-            for(let k=0;k<dersprogramlari[i][j].length;k++){
-                if(Math.random() >= 0.5)
-                dersprogramlari[i][j][k]=true;
-                else
-                dersprogramlari[i][j][k]=false;
-            }
-        }
-    }
-    for (let i = 0; i < dersprogramlari[i].length; i++) {
-        for(let j=0;j<dersprogramlari[1][0].length;j++){
-            for(let k=0;k<dersprogramlari.length;k++){
-                if(dersprogramlari[k][i][j]){
-                sayac++;
-                denemedizisi[i][j][k]=k;
-                }
-                else
-                denemedizisi[i][j][k]='$';
-            }
-            saatler[i][j]=sayac;
-            sayac=0;
-        }
-
-    }
-    var result = denemedizisi.filter(eleman =>eleman !== undefined && !isNaN(eleman));
-    console.log(saatler);
-    console.log(denemedizisi);
-    res.render('anasayfa');
+}
+var result = denemedizisi.filter(eleman => !isNaN(eleman));
+console.log(saatler);
+console.log(denemedizisi);
+console.log(result);
+res.render('anasayfa');
+});
 }
 
 module.exports.get_dersProgramGrubIndex = function(req, res){
@@ -226,15 +244,11 @@ module.exports.get_dersProgramGrubIdIndex = function(req, res){
                 if(grup.from === username) res.render('PrivateApp/GrupProgrami/detail', {grup});
                 else{
                     res.render('PrivateApp/GrupProgrami/detail',{hata: 'Bu gruba erişim izniniz yok.'});
-                } 
-            }            
+                }
+            }
         }else{
             res.render('PrivateApp/GrupProgrami/detail',{hata: "Böyle bir grup yok"});
         }
     })
 
 }
-
-
-
-

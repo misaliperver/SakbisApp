@@ -9,16 +9,20 @@
                 <div class="card-body">
                     <span class="badge badge-pill badge-danger"><%= grup.interval%> saat için</span>
                     <% if(grup.secret == false){%><span class="badge badge-pill badge-success ">Açık Link</span><% }else{%><span class="badge badge-pill badge-warning ">Gizli Link</span><% }%>
-                    <h5 class="card-title text-primary float-left"><%= grup.title%> &nbsp; &nbsp;</h5> 
-                   
+                    <h5 class="card-title text-primary float-left"><%= grup.title%> &nbsp; &nbsp;</h5>
+
                     <p class="card-text" style="clear: both;"><%= grup.issue%></p>
-                    
+
                 </div>
                 <div class="card-footer">
                     <p class="card-text"><small class="text-muted">kimlik: <i><%= grup.programId%></i></small></p>
+
                 </div>
             </div>
+            <form method="post" action="/userApp/grup/<%= grup.programId%>">
+              <input id="programId" type="text" name="programId" value="<%= grup.programId%>">
+              <button type="submit">Karşılaştır</button>
+            </form>
         <%}%>
     </div>
 </div>
-    
