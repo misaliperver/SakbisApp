@@ -20,7 +20,7 @@ router.get('/grup', privateController.get_dersProgramGrubIndex);
 router.get('/grup/olustur', privateController.get_dersProgramGrubOlustur);
 router.post('/grup/olustur', privateController.post_dersProgramGrubOlustur);
 router.get('/grup/:programID',privateController.get_dersProgramGrubIdIndex);
-
+router.post('/grup/:programID',privateController.post_dersProgramGrubIdIndex);
 router.get('/profil', privateController.get_profil);
 
 
