@@ -4,10 +4,38 @@
         <div><%= hata%></div>
         <%}else{ %>
             <div class="card mb-3">
-                <img class="card-img-top" src="/img/image-780x180.jpg" alt="Card image cap">
-                <div class="card-img-overlay "><a class="float-right "><%= grup.startTime.getDay()%>/<%= grup.startTime.getMonth()%>/<%= grup.startTime.getFullYear()%> - <%= grup.finishTime.getDay()%>/<%= grup.finishTime.getMonth()%>/<%= grup.finishTime.getFullYear()%></a></div>
+                <div id="grupimg"><img class="card-img-top" src="/img/image-780x180.jpg" alt="Card image cap"></div>
+                <div id="grupmatris" class="card-top" style="display:none;">
+                    <table class="table">
+                        <thead class="bg-success text-center">
+                            <tr class="d-flex"><th class="col-2 text-left">Saat/Gün</th><th class="col-2">Pazartesi</th><th class="col-2">Salı</th><th class="col-2">Çarşamba</th><th class="col-2">Perşembe</th><th class="col-2">Cuma</th></tr>
+                        </thead>
+                    </table>
+                    <div style="margin-top:-18px;height: 295px; overflow: auto">
+                            <table class="table">
+                                <tbody id="tableMatris">
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">07:00</th> <td id="t00" class="col-2 text-center">   </td> <td id="t01" class="col-2 text-center">   </td> <td id="t02" class="col-2 text-center">   </td> <td id="t03" class="col-2 text-center">   </td> <td id="t04" class="col-2 text-center">   </td></tr>
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">08:00</th> <td id="t10" class="col-2 text-center">   </td> <td id="t11" class="col-2 text-center">   </td> <td id="t12" class="col-2 text-center">   </td> <td id="t13" class="col-2 text-center">   </td> <td id="t14" class="col-2 text-center">   </td></tr>
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">09:00</th> <td id="t20" class="col-2 text-center">   </td> <td id="t21" class="col-2 text-center">   </td> <td id="t22" class="col-2 text-center">   </td> <td id="t23" class="col-2 text-center">   </td> <td id="t24" class="col-2 text-center">   </td></tr>
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">10:00</th> <td id="t30" class="col-2 text-center">   </td> <td id="t31" class="col-2 text-center">   </td> <td id="t32" class="col-2 text-center">   </td> <td id="t33" class="col-2 text-center">   </td> <td id="t34" class="col-2 text-center">   </td></tr>
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">11:00</th> <td id="t40" class="col-2 text-center">   </td> <td id="t41" class="col-2 text-center">   </td> <td id="t42" class="col-2 text-center">   </td> <td id="t43" class="col-2 text-center">   </td> <td id="t44" class="col-2 text-center">   </td></tr>
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">12:00</th> <td id="t50" class="col-2 text-center">   </td> <td id="t51" class="col-2 text-center">   </td> <td id="t52" class="col-2 text-center">   </td> <td id="t53" class="col-2 text-center">   </td> <td id="t54" class="col-2 text-center">   </td></tr>
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">13:00</th> <td id="t60" class="col-2 text-center">   </td> <td id="t61" class="col-2 text-center">   </td> <td id="t62" class="col-2 text-center">   </td> <td id="t63" class="col-2 text-center">   </td> <td id="t64" class="col-2 text-center">   </td></tr>
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">14:00</th> <td id="t70" class="col-2 text-center">   </td> <td id="t71" class="col-2 text-center">   </td> <td id="t72" class="col-2 text-center">   </td> <td id="t73" class="col-2 text-center">   </td> <td id="t74" class="col-2 text-center">   </td></tr>
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">15:00</th> <td id="t80" class="col-2 text-center">   </td> <td id="t81" class="col-2 text-center">   </td> <td id="t82" class="col-2 text-center">   </td> <td id="t83" class="col-2 text-center">   </td> <td id="t84" class="col-2 text-center">   </td></tr>
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">16:00</th> <td id="t90" class="col-2 text-center">   </td> <td id="t91" class="col-2 text-center">   </td> <td id="t92" class="col-2 text-center">   </td> <td id="t93" class="col-2 text-center">   </td> <td id="t94" class="col-2 text-center">   </td></tr>
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">17:00</th> <td id="tA0" class="col-2 text-center">   </td> <td id="tA1" class="col-2 text-center">   </td> <td id="tA2" class="col-2 text-center">   </td> <td id="tA3" class="col-2 text-center">   </td> <td id="tA4" class="col-2 text-center">   </td></tr>
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">18:00</th> <td id="tB0" class="col-2 text-center">   </td> <td id="tB1" class="col-2 text-center">   </td> <td id="tB2" class="col-2 text-center">   </td> <td id="tB3" class="col-2 text-center">   </td> <td id="tB4" class="col-2 text-center">   </td></tr>
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">19:00</th> <td id="tC0" class="col-2 text-center">   </td> <td id="tC1" class="col-2 text-center">   </td> <td id="tC2" class="col-2 text-center">   </td> <td id="tC3" class="col-2 text-center">   </td> <td id="tC4" class="col-2 text-center">   </td></tr>
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">20:00</th> <td id="tD0" class="col-2 text-center">   </td> <td id="tD1" class="col-2 text-center">   </td> <td id="tD2" class="col-2 text-center">   </td> <td id="tD3" class="col-2 text-center">   </td> <td id="tD4" class="col-2 text-center">   </td></tr>
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">21:00</th> <td id="tE0" class="col-2 text-center">   </td> <td id="tE1" class="col-2 text-center">   </td> <td id="tE2" class="col-2 text-center">   </td> <td id="tE3" class="col-2 text-center">   </td> <td id="tE4" class="col-2 text-center">   </td></tr>
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">22:00</th> <td id="tF0" class="col-2 text-center">   </td> <td id="tF1" class="col-2 text-center">   </td> <td id="tF2" class="col-2 text-center">   </td> <td id="tF3" class="col-2 text-center">   </td> <td id="tF4" class="col-2 text-center">   </td></tr>     
+                                </tbody>
+                            </table>
+                        </div></div>
                 <div class="card-body">
-                    <span class="badge badge-pill badge-danger"><%= grup.interval%> saat için</span>
+                        <div class="float-right"><a class="float-right "><%= grup.startTime.getDay()%>/<%= grup.startTime.getMonth()%>/<%= grup.startTime.getFullYear()%> - <%= grup.finishTime.getDay()%>/<%= grup.finishTime.getMonth()%>/<%= grup.finishTime.getFullYear()%></a></div>
+                    <span class="badge badge-pill badge-danger"><span id="interval"><%= grup.interval%></span> saat için</span>
                     <% if(grup.secret == false){%><span class="badge badge-pill badge-success ">Açık Link</span><% }else{%><span class="badge badge-pill badge-warning ">Gizli Link</span><% }%>
                     <h5 class="card-title text-primary float-left"><%= grup.title%> &nbsp; &nbsp;</h5>
 
@@ -15,15 +43,20 @@
 
                 </div>
                 <div class="card-footer">
-                    <p class="card-text"><small class="text-muted">kimlik: <i><%= grup.programId%></i></small></p>
-
+                    <p class="card-text"><small class="text-muted">kimlik: <i><%= grup.programId%></i></small> 
+                        
+                        <button class="btn btn-primary float-right"id="btn_Karsilastir">Karşılaştır</button>
+                    </p>
                 </div>
             </div>
-            <form method="post" action="/userApp/grup/<%= grup.programId%>">
+           
+            <!--<form method="post" action="/userApp/grup/<%= grup.programId%>">
               <input id="programId" type="text" name="programId" value="<%= grup.programId%>">
               <input id="interval" type="text" name="interval" value="<%= grup.interval%>">
-              <button type="submit">Karşılaştır</button>
-            </form>
+             
+            </form> !-->
         <%}%>
+
+        
     </div>
 </div>

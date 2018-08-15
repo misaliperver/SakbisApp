@@ -94,99 +94,87 @@ const getUser = async (query) => {
     let i=0;
   for(const item of grup.people){
     query = {username: item};
-  dersprogramlariARRAY[i] = await   Matris.findOne(query);
-  i++;
- }
+    dersprogramlariARRAY[i] = await   Matris.findOne(query);
+    i++;
+   }
   return { grup:grup, dersprogramlariARRAY:dersprogramlariARRAY };
 };
-module.exports.post_dersProgramGrubIdIndex =function (req, res){
-let dersprogramlari;
-let sayac;
-let saatler;
-let denemedizisi;
-console.log(req.body);
-getUser({ programId: req.body.programId }).then((results)=>{
-dersprogramlari = new Array(results.grup.people.length);//grupdaki insanların sayısı kadar
-for(let i=0;i<results.grup.people.length;i++)
-{
-  dersprogramlari[i]=results.dersprogramlariARRAY[i].matris;
-}
-console.log(dersprogramlari[0].length);
-console.log(dersprogramlari[0][0].length);
-console.log(dersprogramlari.length);
-sayac=0;
-saatler=new Array(5);
-denemedizisi=new Array(5);//5  gün
-//return asenkronIslem3(sonuc2);
-for(let i=0;i<saatler.length;i++)
-{
-    saatler[i]=new Array(16-req.body.interval+1);
-    denemedizisi[i]=new Array(16-req.body.interval+1);//15 saaat
-    for(let j=0;j<denemedizisi[i].length;j++)
-    {
-        saatler[i][j]=true;
-        denemedizisi[i][j]=new Array(results.grup.people.length);//insan sayısı
-    }
-}
-if(req.body.interval!=1){
-   let bulusmaSaati=req.body.interval;//buluşma saatine göre belirle
-   let Yenidersprogramlari=new Array(results.grup.people.length);//sikiştirilmiş ders programı
-   for(let i=0;i<dersprogramlari.length;i++)
-    {
-        Yenidersprogramlari[i]=new Array(5);
-        for(let j=0;j<Yenidersprogramlari[i].length;j++)
-         {
-        Yenidersprogramlari[i][j]=new Array(15-(bulusmaSaati-1));
-          }
-      }//yeni ders programi initilaziladim
-      //formatlama islemi
-
-      for(let i=0;i<dersprogramlari.length;i++){       //kisi sayisi
-           for(let j=0;j<dersprogramlari[i].length;j++){//5 gün
-             for(let k=0;k<(dersprogramlari[i][j].length-bulusmaSaati+1);k++){//saat
-               for(let z=0;z<bulusmaSaati;z++){
-               if(dersprogramlari[i][j][k+z]!=true)
-               {
-                   Yenidersprogramlari[i][j][k]=false;
-                   break;
-               }
-               else
-               {
-                   Yenidersprogramlari[i][j][k]=true;
-               }
-               }
-             }
-
-
-
-           }
-       }
-   console.log(Yenidersprogramlari);
-dersprogramlari=Yenidersprogramlari;
-}
-for (let i = 0; i < dersprogramlari[0].length; i++) {//5 gün sayisi
-    for(let j=0;j<dersprogramlari[0][0].length;j++){//16 saat sayisi
-        for(let k=0;k<dersprogramlari.length;k++){//2 kisi sayisi
-            if(dersprogramlari[k][i][j]){
-            sayac++;
-            denemedizisi[i][j][k]=k;
-            }
-           else{
-            denemedizisi[i][j][k]='$';
-          }
+module.exports.post_dersProgramGrubIdIndex = function (req, res){
+    let dersprogramlari;
+    let sayac;
+    let saatler;
+    let denemedizisi;
+    console.log(req.body);
+    getUser({ programId: req.body.programId }).then((results)=>{
+        dersprogramlari = new Array(results.grup.people.length);//grupdaki insanların sayısı kadar
+        for(let i=0;i<results.grup.people.length;i++)
+        {
+            dersprogramlari[i]=results.dersprogramlariARRAY[i].matris;
         }
-        saatler[i][j]=sayac;
         sayac=0;
-    }
+        saatler=new Array(5);
+        denemedizisi=new Array(5);//5  gün
+        //return asenkronIslem3(sonuc2);
+        for(let i=0;i<saatler.length;i++)
+        {
+            saatler[i]=new Array(16-req.body.interval+1);
+            denemedizisi[i]=new Array(16-req.body.interval+1);//15 saaat
+            for(let j=0;j<denemedizisi[i].length;j++)
+            {
+                saatler[i][j]=true;
+                denemedizisi[i][j]=new Array(results.grup.people.length);//insan sayısı
+            }
+        }
+        if(req.body.interval!=1){
+            let bulusmaSaati=req.body.interval;//buluşma saatine göre belirle
+            let Yenidersprogramlari=new Array(results.grup.people.length);//sikiştirilmiş ders programı
+            for(let i=0;i<dersprogramlari.length;i++)
+            {
+                Yenidersprogramlari[i]=new Array(5);
+                for(let j=0;j<Yenidersprogramlari[i].length;j++)
+                {
+                    Yenidersprogramlari[i][j]=new Array(15-(bulusmaSaati-1));
+                }
+            }//yeni ders programi initilaziladim
+            //formatlama islemi
 
-}
-
-var result = denemedizisi.filter(eleman => !isNaN(eleman));
-console.log(saatler);
-console.log(denemedizisi);
-console.log(result);
-res.render('anasayfa');
-});
+            for(let i=0; i<dersprogramlari.length; i++){       //kisi sayisi
+                for(let j=0; j<dersprogramlari[i].length; j++){//5 gün
+                    for(let k=0; k<(dersprogramlari[i][j].length-bulusmaSaati+1); k++){//saat
+                        for(let z=0; z<bulusmaSaati; z++){
+                            if(dersprogramlari[i][j][k+z]!=true)
+                            {
+                                Yenidersprogramlari[i][j][k]=false;
+                                break;
+                            }
+                            else
+                            {
+                                Yenidersprogramlari[i][j][k]=true;
+                            }
+                        }
+                    }
+                }
+            }
+            dersprogramlari=Yenidersprogramlari;
+        }
+        for (let i = 0; i<dersprogramlari[0].length; i++) {//5 gün sayisi
+            for(let j=0; j<dersprogramlari[0][0].length; j++){//16 saat sayisi
+                for(let k=0; k<dersprogramlari.length; k++){//2 kisi sayisi
+                    if(dersprogramlari[k][i][j]){
+                        sayac++;
+                        denemedizisi[i][j][k]=results.grup.people[k];
+                    }else{
+                        denemedizisi[i][j][k]='$';
+                    }
+                }
+                saatler[i][j]=sayac;
+                sayac=0;
+            }
+        }
+        var result = denemedizisi.filter(eleman => !isNaN(eleman));
+        console.log(saatler); console.log(denemedizisi);console.log(result);
+        res.json({saatler:saatler, matris:denemedizisi, result:result, toplamKisi: results.grup.people.length});
+    });//then fonksiyonunun sonu
 }
 
 module.exports.get_dersProgramGrubIndex = function(req, res){
