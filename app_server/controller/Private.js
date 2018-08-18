@@ -296,15 +296,20 @@ module.exports.get_searchtoPeer = function(req, res){
 
 module.exports.get_ProfilOtherID = function(req, res){
     var arananID = req.url.substring(22,32);
+    
     User.getPeerUserByID(arananID, function(err, peer){
         if(err) throw err;
         if(peer){
+            var i=0;
+            if(peer.username) i++; if(peer.password) i++;if(peer.ad)  i++;if(peer.soyad) i++;  
+            if(peer.yas)  i++;if(peer.userimg)  i++;if(peer.telno)  i++;  
+            if(peer.unibolum) i++;if(peer.bio)  i++;   if(peer.cinsiyet)i++;
             Matris.getUserByUsername(arananID, function(err, dersProgrami){
                 if(err) throw err;
                 if(dersProgrami){
                     peer['dersProgrami']= dersProgrami;           
                 }
-                res.render('PrivateApp/peer', {peer: peer})   
+                res.render('PrivateApp/peer', {peer: peer, len:i})   
             });
         }else{
             res.render('PrivateApp/peer', {msg: "Böyle biri yok"})  
@@ -327,7 +332,7 @@ module.exports.post_profilAyarlar = function(req, res){
     var telno = req.body.telno;       if(telno)    user['telno'] = telno;
     var unibolum = req.body.unibolum; if(unibolum) user['unibolum'] = unibolum;
     var bio = req.body.bio;           if(bio)      user['bio'] = bio;
-    var cinsiyet = req.body.cinsiyet; if(cinsiyet && (cinsiyet==="Erkek" || cinsiyet==="Kadın" || cinsiyet==="Karışık")) user['cinsiyet'] = cinsiyet;
+    var cinsiyet = req.body.cinsiyet; if((cinsiyet=="Erkek" || cinsiyet=="Kadın" || cinsiyet=="Karışık")) user['cinsiyet'] = cinsiyet;
     console.log(user);
     User.findOneAndUpdate({username: username}, user, function(err, rawResponse) {
         if (err){ msg= 'Güncellenemedi';  throw err;}

@@ -2,23 +2,35 @@
     <%= msg %>
 <%}else{%>
     <div class="container">
+            <div class="row progress mb-2">
+                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style=<%= 'width:' + 10*len + '%'%> aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><%= 'Bu profilin %' + 10*len + ' tamamlandı.'%></div>
+                </div>
         <div class="row">
             <div class="col-12">
             </div>
         </div>
             <div class="row mb-3">
                 <div class="col-md-3" style="text-align: center">
-                    <div ><img class="rounded-circle" width="200px" height="200px" src="/userimg/girl3.png"/> </div>
+                    <div><img class="rounded-circle" width="200px" height="200px" src="<%if(peer.userimg){%><%='/userimg/' + peer.userimg + '.png'%><%}else{%>/userimg/unknow.png<%}%>"/> </div>
                 </div>
                 <div class="col-md-6">     
                     <ul class="list-group list-inline">
                         <li class="list-group-item"><a style="color:rgb(9, 2, 70); font-size: 18px;"><strong>Sakarya Üniversitesi</strong></a></li>
-                        <li class="list-group-item"><a style="color:rgb(15, 121, 15)"><strong><%=peer.ad%> <%=peer.soyad%></strong></a></li>
+                        <li class="list-group-item"><a style="color:rgb(15, 121, 15)"><strong><%=peer.ad%> <%=peer.soyad%> </strong></a></li>
                         <li class="list-group-item"><a><%=peer.email%> </a></li>
-                        <li class="list-group-item"><a><strong><%=peer.yas%></strong></a></li>
+                        <li class="list-group-item"><a>bio: <small><%=peer.bio%></small></a></li>
                         
                     </ul>         
                 </div>
+                <div class="col-md-3">     
+                        <ul class="list-group list-inline">
+                            <li class="list-group-item"><a style="color:rgb(9, 2, 70); font-size: 18px;"><small><%=peer.unibolum%></small></a></li>
+                            <li class="list-group-item"><a style="color:rgb(15, 121, 15)"><%=peer.username%></strong></a></li>
+                            <li class="list-group-item"><a><%=peer.telno%> </a></li>
+                            <li class="list-group-item"><a><strong><%=peer.yas%> - <%=peer.cinsiyet%></strong></a></li>
+                            
+                        </ul>         
+                    </div>
                 
             </div>
             <div class="row">

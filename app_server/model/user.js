@@ -62,14 +62,14 @@ module.exports.getUserById = function(id, callback){
 }
 
 module.exports.getUserBylimit = function(lim, callback){
-	User.find({},{ username: 1, ad: 1, soyad: 1  },callback).sort({_id:-1}).limit(lim);
+	User.find({},{ username: 1, ad: 1, soyad: 1, userimg:1 },callback).sort({_id:-1}).limit(lim);
 }
 module.exports.getPeer = function(id, callback){
 	User.find({"username" : {$regex : id}}, { username: 1} , callback).sort({_id:-1}).limit(10);
 }
 module.exports.getPeerUserByID = function(username, callback){
 	var query = {username: username};
-	User.findOne(query, {username:1, ad:1, soyad:1, email:1, yas:1} , callback);
+	User.findOne(query, {username:1, ad:1, soyad:1, email:1, yas:1, userimg:1, bio:1, cinsiyet:1, telno:1, unibolum:1} , callback);
 }
 
 

@@ -29,7 +29,7 @@
                 <ul class="list-group">
                 <% if(typeof kullanicilar !== 'undefined'){%>
                     <% kullanicilar.forEach(function(kullanicilar) { %>
-                       <li class="list-group-item"><a class="text-primary"><%= kullanicilar.username %> </a><a class="text-danger"><%= kullanicilar.ad %> <%= kullanicilar.soyad %></a></li>
+                       <li class="list-group-item"><img width="30px" src="<%if(kullanicilar.userimg){%><%='/userimg/' + kullanicilar.userimg + '.png'%><%}else{%>/userimg/unknow.png<%}%>"/> <a class="text-primary"><%= kullanicilar.username %> </a><a class="text-danger"><%= kullanicilar.ad %> <%= kullanicilar.soyad %></a></li>
                     <% }); %>
                 <% }%>
                 </ul>
