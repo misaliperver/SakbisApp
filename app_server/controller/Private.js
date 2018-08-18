@@ -56,7 +56,12 @@ module.exports.put_Ajax_dersProgramiEkle = function(req, res){
 }
 
 module.exports.get_profil = function(req, res){
-    res.render('PrivateApp/profil');
+    var i=0;
+    if(req.user.username) i++; if(req.user.password) i++;if(req.user.ad)  i++;if(req.user.soyad) i++;  
+    if(req.user.yas)  i++;if(req.user.userimg)  i++;if(req.user.telno)  i++;  
+    if(req.user.unibolum) i++;if(req.user.bio)  i++;   if(req.user.cinsiyet)i++;
+  
+    res.render('PrivateApp/profil', {len: i});
 
 }
 
@@ -306,6 +311,32 @@ module.exports.get_ProfilOtherID = function(req, res){
         }
     })
 }
+
+module.exports.get_profilAyarlar = function(req, res){
+   res.render('PrivateApp/ayarlar');
+}
+module.exports.post_profilAyarlar = function(req, res){
+    var user = {};
+
+    var username = req.user.username;
+    var password = req.body.sifre;    if(password) user['password'] = password;
+    var ad = req.body.ad;             if(ad)       user['ad'] = ad;
+    var soyad = req.body.soyad;       if(soyad)    user['soyad'] = soyad;
+    var yas = req.body.yas;           if(yas)      user['yas'] = yas;
+    var userimg = req.body.userimg;   if(userimg)  user['userimg'] = userimg;
+    var telno = req.body.telno;       if(telno)    user['telno'] = telno;
+    var unibolum = req.body.unibolum; if(unibolum) user['unibolum'] = unibolum;
+    var bio = req.body.bio;           if(bio)      user['bio'] = bio;
+    var cinsiyet = req.body.cinsiyet; if(cinsiyet && (cinsiyet==="Erkek" || cinsiyet==="Kadın" || cinsiyet==="Karışık")) user['cinsiyet'] = cinsiyet;
+    console.log(user);
+    User.findOneAndUpdate({username: username}, user, function(err, rawResponse) {
+        if (err){ msg= 'Güncellenemedi';  throw err;}
+        else {msg= 'Güncelleme başarılı'; }
+        res.redirect('/userApp/Profil');
+     });
+
+}
+
 /*
 Matris.getUserByUsername(req.user.username, function(err, myDersProgrami){
     if(err) throw err;

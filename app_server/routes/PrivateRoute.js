@@ -25,6 +25,8 @@ router.delete('/grup/:programID',privateController.delete_dersProgramGrubIdIndex
 
 router.get('/searchtoPeer/:peerID',privateController.get_searchtoPeer);
 router.get('/profil', privateController.get_profil);
+router.get('/profil/ayarlar', privateController.get_profilAyarlar);
+router.post('/profil/ayarlar', privateController.post_profilAyarlar);
 
 
 

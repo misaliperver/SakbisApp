@@ -21,6 +21,21 @@ var UserSchema = mongoose.Schema({
     },
     yas: {
 		type: String
+	},
+	userimg: {
+		type: String
+	},
+	telno: {
+		type: String
+	},
+	cinsiyet: {
+		type: String
+	},
+	unibolum: {
+		type: String
+	},
+	bio: {
+		type: String
 	}
 });
 

@@ -1,6 +1,48 @@
-naber
 <% if(typeof peer === "undefined"){%>
     <%= msg %>
 <%}else{%>
-    <%= peer %>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+            </div>
+        </div>
+            <div class="row mb-3">
+                <div class="col-md-3" style="text-align: center">
+                    <div ><img class="rounded-circle" width="200px" height="200px" src="/userimg/girl3.png"/> </div>
+                </div>
+                <div class="col-md-6">     
+                    <ul class="list-group list-inline">
+                        <li class="list-group-item"><a style="color:rgb(9, 2, 70); font-size: 18px;"><strong>Sakarya Üniversitesi</strong></a></li>
+                        <li class="list-group-item"><a style="color:rgb(15, 121, 15)"><strong><%=peer.ad%> <%=peer.soyad%></strong></a></li>
+                        <li class="list-group-item"><a><%=peer.email%> </a></li>
+                        <li class="list-group-item"><a><strong><%=peer.yas%></strong></a></li>
+                        
+                    </ul>         
+                </div>
+                
+            </div>
+            <div class="row">
+                <table class="table">
+                    <thead class="bg-success">
+                        <tr class="d-flex"><th class="col-2">Saat/Gün</th><th class="col-2">Pazartesi</th><th class="col-2">Salı</th><th class="col-2">Çarşamba</th><th class="col-2">Perşembe</th><th class="col-2">Cuma</th></tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="row" style="margin-top:-18px;height: 300px; overflow: auto">
+                    <table class="table">
+                        <tbody id="tableMatris">
+
+                            <% if(typeof peer.dersProgrami !== "undefined"){ for(var i=0; i<15; i++){ %>
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row"><%=i+7%>:00</th>
+                                <%for(var j=0; j<5; j++){
+                                        if(peer.dersProgrami.matris[j][i] == true){%>
+                                        <td id="" class="col-2"  style="background-color: yellow">n1</td>
+                                        <%}else{%>
+                                        <td id="" class="col-2"  >n1</td>
+                                <%}}}}%>
+                           
+                        </tbody>
+                    </table>
+                </div>
+        </div>
 <%}%>
