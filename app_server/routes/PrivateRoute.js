@@ -7,7 +7,7 @@ var privateController = require(path.join(__dirname, '../controller/Private.js')
 
 
 router.use(function(req, res, next){
-    console.log('MiddleWare --> PrivateRoute');
+    console.log('MiddleWare --> PrivateRoute' + req.url);
     next();
 });
 
@@ -21,7 +21,14 @@ router.get('/grup/olustur', privateController.get_dersProgramGrubOlustur);
 router.post('/grup/olustur', privateController.post_dersProgramGrubOlustur);
 router.get('/grup/:programID',privateController.get_dersProgramGrubIdIndex);
 router.post('/grup/:programID',privateController.post_dersProgramGrubIdIndex);
+router.delete('/grup/:programID',privateController.delete_dersProgramGrubIdIndex);
+
+router.get('/searchtoPeer/:peerID',privateController.get_searchtoPeer);
 router.get('/profil', privateController.get_profil);
+
+
+
+router.get('/search/', privateController.get_ProfilOtherID);
 
 
 module.exports = router;

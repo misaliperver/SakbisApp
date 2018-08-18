@@ -9,9 +9,12 @@ $(document).ready(function(){
             contentType: 'application/json',
             data: JSON.stringify({programId: programID, interval: intervaL}),
             success: function(response) {
-                console.log(response)
-                $('#grupimg').css("display", "none")
-                $('#grupmatris').css("display", "")
+                console.log(response);
+
+                $('#grupimg').css("display", "none");
+                $('#grupmatris').css("display", "");
+                $('#btn_photo').css("display", "");
+                $('#btn_Karsilastir').text("Yinele");
 
                 for(var i=0; i<response.saatler.length; i++){
                     for(var j=0; j<response.saatler[i].length; j++){
@@ -28,7 +31,7 @@ $(document).ready(function(){
                             if(j<10) gline = 't'+ j  + i;
                             else gline = 't'+ gindex + i;
                             if(response.saatler[i][j]=="1")  
-                            $("#"+gline).text("%" + Math.floor((response.saatler[i][j] / response.toplamKisi) * 100))
+                            $("#"+gline).text("%" + Math.floor((response.saatler[i][j] / response.toplamKisi) * 100));
                     }
                 }
             },
@@ -36,5 +39,25 @@ $(document).ready(function(){
                
             }
         }); 
-    })
+    });
+
+    $('#btn_photo').on('click', function(){
+        $('#grupimg').css("display", "");
+        $('#grupmatris').css("display", "none");
+        $('#btn_photo').css("display", "none");
+        $('#btn_Karsilastir').text("Karşılaştır");
+    });
+
+    $('#btn_Sil').on('click', function(){
+        $.ajax({
+            url: window.location.pathname,
+            type: 'DELETE',
+            success: function(response){
+                alert('silindi');
+            },
+            error: function() {
+               
+            }
+        });
+    });
 });

@@ -29,3 +29,8 @@ module.exports.getUserByUsername = function(username, callback){
 module.exports.getUserById = function(id, callback){
 	Matris.findById(id, callback);
 }
+//Burayı incele mk
+module.exports.getPeer = function(id, callback){
+
+	Matris.find({"username" : {$regex : id}}, { username: 1} , callback).sort({_id:-1}).limit(10);
+}

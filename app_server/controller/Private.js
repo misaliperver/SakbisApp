@@ -1,5 +1,6 @@
 var path = require('path'); //path modülünü ekledik
 var Matris = require('../model/dersprogrami');
+var User = require('../model/user');
 var Grup = require('../model/GrupProgrami');
 var passport = require('passport');
 
@@ -177,6 +178,13 @@ module.exports.post_dersProgramGrubIdIndex = function (req, res){
     });//then fonksiyonunun sonu
 }
 
+module.exports.delete_dersProgramGrubIdIndex = function(req, res){
+    Grup.removeGrupByProjectId(req.params.programID, function(err, thisGrup){
+        if(err) throw err;
+        res.json({msg: "silindi"});
+    })
+}
+
 module.exports.get_dersProgramGrubIndex = function(req, res){
     var username = req.user.username;
     Grup.getGrupByUsername(username, function(err, grup){
@@ -272,3 +280,37 @@ module.exports.get_dersProgramGrubIdIndex = function(req, res){
     })
 
 }
+
+
+module.exports.get_searchtoPeer = function(req, res){
+    console.log('naber')
+    User.getPeer(req.params.peerID, function(err, result){
+        res.json({result: result})
+    })
+}
+
+module.exports.get_ProfilOtherID = function(req, res){
+    var arananID = req.url.substring(22,32);
+    User.getPeerUserByID(arananID, function(err, peer){
+        if(err) throw err;
+        if(peer){
+            Matris.getUserByUsername(arananID, function(err, dersProgrami){
+                if(err) throw err;
+                if(dersProgrami){
+                    peer['dersProgrami']= dersProgrami;           
+                }
+                res.render('PrivateApp/peer', {peer: peer})   
+            });
+        }else{
+            res.render('PrivateApp/peer', {msg: "Böyle biri yok"})  
+        }
+    })
+}
+/*
+Matris.getUserByUsername(req.user.username, function(err, myDersProgrami){
+    if(err) throw err;
+    if(myDersProgrami){
+        user.dersProgrami = myDersProgrami;
+        res.render('PrivateApp/peer',{peer: peer, user: user})
+    }
+});*/

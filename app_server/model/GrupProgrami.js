@@ -41,6 +41,10 @@ module.exports.getGrupByProjectId = function(grupID, callback){
   var query = {programId: grupID};
 	Grup.findOne(query, callback);
 }
+module.exports.removeGrupByProjectId = function(grupID, callback){
+  var query = {programId: grupID};
+	Grup.remove(query, callback);
+}
 module.exports.getGrupByUsername = function(username, callback){
   var query = {from: username};
 	Grup.find(query,callback)
