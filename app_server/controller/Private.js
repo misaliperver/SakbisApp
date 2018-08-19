@@ -24,12 +24,13 @@ module.exports.put_Ajax_dersProgramiEkle = function(req, res){
     var private  = req.body.private;
     var username = req.user.username;
     var date = Date.now();
-
+    let aciklama= req.body.aciklama;
     var msg = "";
         Matris.findOne({username: username}, function (err, dersProgrami) {
             if(dersProgrami){
                 Matris.findOneAndUpdate({username: username}, {
                     matris: matris,
+                    aciklama:aciklama,
                     private: private,
                     username: username,
                     date: date
@@ -41,6 +42,7 @@ module.exports.put_Ajax_dersProgramiEkle = function(req, res){
             }else{
                 var newDersProgrami = new Matris({
                     matris: matris,
+                    aciklama:aciklama,
                     private: private,
                     username: username,
                     date: date
