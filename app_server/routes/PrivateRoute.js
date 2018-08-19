@@ -15,6 +15,7 @@ router.use(function(req, res, next){
 router.get('/dersprogramivarmi', privateController.get_Ajax_dersProgramiEkle);
 router.get('/dersprogramiekle' , privateController.get_dersProgramiEkle);
 router.put('/dersprogramiekle' , privateController.put_Ajax_dersProgramiEkle);
+router.put('/aciklamaekle' , privateController.put_Ajax_aciklamaEkle);
 //grup
 router.get('/grup', privateController.get_dersProgramGrubIndex);
 router.get('/grup/olustur', privateController.get_dersProgramGrubOlustur);

@@ -9,6 +9,10 @@ var MatrisSchema = mongoose.Schema({
     matris: {
 		type: Array
     },
+		aciklama:
+		{
+			type:Array
+		},
     date: {
 		type: Date
     },

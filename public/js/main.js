@@ -11,7 +11,7 @@ if(windowLoc === '/userApp/dersprogramiekle'){
             matris[3] = new Array(false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false)
             matris[4] = new Array(false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false)
             console.log('aaa');
-        }  
+        }
 
        $.ajax({
             url: '/userApp/dersprogramivarmi',
@@ -23,7 +23,7 @@ if(windowLoc === '/userApp/dersprogramiekle'){
                     var line="";
                     var index ="";
                     for(var i=0; i<5; i++){
-                        for(var j=0; j<16; j++){ 
+                        for(var j=0; j<16; j++){
                             if(j==10) index='A';
                             else if(j==11) index='B';
                             else if(j==12) index='C';
@@ -33,7 +33,7 @@ if(windowLoc === '/userApp/dersprogramiekle'){
 
                             if(j<10) line = 't'+ j  + i;
                             else line = 't'+ index + i;
-                            if(matris[i][j]===true)  
+                            if(matris[i][j]===true)
                             $("#"+line).css("background-color", "yellow");
                         }
                     }
@@ -45,13 +45,13 @@ if(windowLoc === '/userApp/dersprogramiekle'){
                 alert("Server'la bağlantı kurulamadı!")
             }
         });
-    
+
 
         $('#tableMatris').on('click',function(){
-            var ID = event.target.id;   
+            var ID = event.target.id;
             if(ID != ""){
                     var indis = [2];
-                    
+
                     indis[0] = parseInt(ID[2]); //Sadece 5'e kadar değer alır.
                     if(parseInt(ID[1])<10) indis[1] = parseInt(ID[1]);
                     else if(ID[1]=='A') indis[1] = 10;
@@ -64,9 +64,9 @@ if(windowLoc === '/userApp/dersprogramiekle'){
                     console.log(indis[0],indis[1],matris[indis[0]][indis[1]])
 
                     if(matris[indis[0]][indis[1]] == false){
-                        
+
                         matris[indis[0]][indis[1]] = true;
-                        
+
                         $("#"+ID).css("background-color", "yellow");
                     }else{
                         matris[indis[0]][indis[1]] = false;
@@ -75,7 +75,7 @@ if(windowLoc === '/userApp/dersprogramiekle'){
                     console.log(indis[0],indis[1],matris[indis[0]][indis[1]])
             }
         });
-        
+
         $("#btn_matrisGonder").on('click',(function(){
             $.ajax({
                 url: '/userApp/dersprogramiekle',
@@ -89,14 +89,17 @@ if(windowLoc === '/userApp/dersprogramiekle'){
                 error: function() {
                     alert('Kaldedilemedi!')
                 }
-            }); 
+            });
         }));
- 
+
     });
 }
 else if(windowLoc === '/userApp/Profil'){
     $(document).ready(function(){
+
+
         var matris = new Array();
+        let aciklama_matris;
         function matrisKur(){
             console.log('a');
             matris[0] = new Array(false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false)
@@ -105,19 +108,42 @@ else if(windowLoc === '/userApp/Profil'){
             matris[3] = new Array(false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false)
             matris[4] = new Array(false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false)
             console.log('aaa');
-        }  
+        }
+        function aciklamakur(){
+                let aciklama_matris=new Array();
+                aciklama_matris[0] = new Array(16);
+                aciklama_matris[1] = new Array(16);
+                aciklama_matris[2] = new Array(16);
+                aciklama_matris[3] = new Array(16);
+                aciklama_matris[4] = new Array(16);
+                return aciklama_matris;
+}
+
 
        $.ajax({
             url: '/userApp/dersprogramivarmi',
             method: 'GET',
             dataType: 'json',
             success: function(response){
+              console.log(response.aciklama);
+
+              if(response.aciklama!= undefined && response.aciklama.length > 0)
+              {
+                  aciklama_matris=response.aciklama;
+
+                console.log(aciklama_matris);
+              }
+              else {
+                aciklama_matris=aciklamakur();
+                console.log(aciklama_matris);
+              }
                if(response.dersProgrami!==null){
                     matris = response.dersProgrami;
-                    var line="";
-                    var index ="";
+
+                    let line="";
+                    let index ="";
                     for(var i=0; i<5; i++){
-                        for(var j=0; j<16; j++){ 
+                        for(var j=0; j<16; j++){
                             if(j==10) index='A';
                             else if(j==11) index='B';
                             else if(j==12) index='C';
@@ -127,17 +153,75 @@ else if(windowLoc === '/userApp/Profil'){
 
                             if(j<10) line = 't'+ j  + i;
                             else line = 't'+ index + i;
-                            if(matris[i][j]===true)  
+                            if(matris[i][j]===true)
                             $("#"+line).css("background-color", "yellow");
+
+                            if(typeof aciklama_matris[i]!='undefined'){
+                              if(typeof aciklama_matris[i][j]!='undefined'&&aciklama_matris[i][j]!=null)
+                              $("#"+line).text(aciklama_matris[i][j]);
+                            }
+                              else {
+                              //    $("#"+line).text("aciklama");
+                              }
                         }
-                    }
-               }else{
+
+                  }
+}
+
+               else{
                 matrisKur();
                }
+
             },
             error: function() {
                 alert("Server'la bağlantı kurulamadı!")
             }
+        });
+
+        $('#peerTableMatris').on('click',function(){
+            let ID = event.target.id;
+            if(ID != ""){
+                    var indis = [2];
+                    console.log(aciklama_matris);
+
+                    indis[0] = parseInt(ID[2]); //Sadece 5'e kadar değer alır.
+                    if(parseInt(ID[1])<10) indis[1] = parseInt(ID[1]);
+                    else if(ID[1]=='A') indis[1] = 10;
+                    else if(ID[1]=='B') indis[1] = 11;
+                    else if(ID[1]=='C') indis[1] = 12;
+                    else if(ID[1]=='D') indis[1] = 13;
+                    else if(ID[1]=='E') indis[1] = 14;
+                    else if(ID[1]=='F') indis[1] = 15;
+
+
+                    let id="txt"+ID
+                    let value=$("#"+ID).text();
+                    console.log(value);
+                    $("#"+ID).append('<input type="text" id="'+id+'" value="'+value+'"/>');
+                    $("#"+"txt"+ID).focus();
+                    $("#"+"txt"+ID ).blur(function() {
+                      let value=$( this ).val();
+                      aciklama_matris[indis[0]][indis[1]]=value;
+                      $.ajax({
+                          url: '/userApp/aciklamaekle',
+                          method: 'PUT',
+                          contentType: 'application/json',
+                          data: JSON.stringify({aciklama: aciklama_matris,matris: matris, private: false}),
+                          success: function(response) {
+                              console.log(response);
+                              alert('Başarıyla Kaydedildi.')
+                              location.reload();
+                          },
+                          error: function() {
+                              alert('Kaldedilemedi!')
+                          }
+                      });
+
+                      console.log(aciklama_matris[indis[0]][indis[1]]);
+                      $( this ).remove();
+                    });
+           }
+
         });
     });
 }

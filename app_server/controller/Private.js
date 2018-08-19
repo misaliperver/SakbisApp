@@ -12,7 +12,7 @@ module.exports.get_Ajax_dersProgramiEkle = function(req, res){
     Matris.findOne({username: req.user.username}, function (err, dersProgrami) {
         if(err) throw err;
         if(dersProgrami){
-            res.json({dersProgrami: dersProgrami.matris});
+            res.json({dersProgrami: dersProgrami.matris,aciklama:dersProgrami.aciklama});
         }else{
             res.json({dersProgrami: null});
         }
@@ -54,13 +54,51 @@ module.exports.put_Ajax_dersProgramiEkle = function(req, res){
         });
 
 }
+module.exports.put_Ajax_aciklamaEkle = function(req, res){
+    let matris=req.body.matris;
+    let private=req.body.private;
+    let aciklama   = req.body.aciklama;
+    let username = req.user.username;
+    let date = Date.now();
+
+    let msg = "";
+        Matris.findOne({username: username}, function (err, dersProgrami) {
+            if(dersProgrami){
+                Matris.findOneAndUpdate({username: username}, {
+                    matris: matris,
+                    aciklama:aciklama,
+                    private: private,
+                    username: username,
+                    date: date
+                  }, function(err, rawResponse) {
+                    if (err){ msg= 'Güncellenemedi';  throw err;}
+                    else {msg= 'Güncelleme başarılı'; }
+                    res.json({msg});
+                 });
+            }else{
+                var newDersProgrami = new Matris({
+                    matris: matris,
+                    aciklama:aciklama,
+                    private: private,
+                    username: username,
+                    date: date
+                });
+                Matris.createDersProgrami(newDersProgrami, function (err, callbackDersProgrami) {
+                    if (err){ msg = 'Yenisi oluşturululamadı'; throw err; }
+                    else {msg= 'Yeni kayıt oluşturuldu.'; }
+                });
+                res.json({msg});
+            }
+        });
+
+}
 
 module.exports.get_profil = function(req, res){
     var i=0;
-    if(req.user.username) i++; if(req.user.password) i++;if(req.user.ad)  i++;if(req.user.soyad) i++;  
-    if(req.user.yas)  i++;if(req.user.userimg)  i++;if(req.user.telno)  i++;  
+    if(req.user.username) i++; if(req.user.password) i++;if(req.user.ad)  i++;if(req.user.soyad) i++;
+    if(req.user.yas)  i++;if(req.user.userimg)  i++;if(req.user.telno)  i++;
     if(req.user.unibolum) i++;if(req.user.bio)  i++;   if(req.user.cinsiyet)i++;
-  
+
     res.render('PrivateApp/profil', {len: i});
 
 }
@@ -296,23 +334,23 @@ module.exports.get_searchtoPeer = function(req, res){
 
 module.exports.get_ProfilOtherID = function(req, res){
     var arananID = req.url.substring(22,32);
-    
+
     User.getPeerUserByID(arananID, function(err, peer){
         if(err) throw err;
         if(peer){
             var i=0;
-            if(peer.username) i++; if(peer.password) i++;if(peer.ad)  i++;if(peer.soyad) i++;  
-            if(peer.yas)  i++;if(peer.userimg)  i++;if(peer.telno)  i++;  
+            if(peer.username) i++; if(peer.password) i++;if(peer.ad)  i++;if(peer.soyad) i++;
+            if(peer.yas)  i++;if(peer.userimg)  i++;if(peer.telno)  i++;
             if(peer.unibolum) i++;if(peer.bio)  i++;   if(peer.cinsiyet)i++;
             Matris.getUserByUsername(arananID, function(err, dersProgrami){
                 if(err) throw err;
                 if(dersProgrami){
-                    peer['dersProgrami']= dersProgrami;           
+                    peer['dersProgrami']= dersProgrami;
                 }
-                res.render('PrivateApp/peer', {peer: peer, len:i})   
+                res.render('PrivateApp/peer', {peer: peer, len:i})
             });
         }else{
-            res.render('PrivateApp/peer', {msg: "Böyle biri yok"})  
+            res.render('PrivateApp/peer', {msg: "Böyle biri yok"})
         }
     })
 }
