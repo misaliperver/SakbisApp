@@ -165,7 +165,7 @@ module.exports.post_dersProgramGrubIdIndex = function (req, res){
             denemedizisi[i]=new Array(16-req.body.interval+1);//15 saaat
             for(let j=0;j<denemedizisi[i].length;j++)
             {
-                saatler[i][j]=true;
+                saatler[i][j]=0;
                 denemedizisi[i][j]=new Array(results.grup.people.length);//insan sayısı
             }
         }
@@ -186,14 +186,14 @@ module.exports.post_dersProgramGrubIdIndex = function (req, res){
                 for(let j=0; j<dersprogramlari[i].length; j++){//5 gün
                     for(let k=0; k<(dersprogramlari[i][j].length-bulusmaSaati+1); k++){//saat
                         for(let z=0; z<bulusmaSaati; z++){
-                            if(dersprogramlari[i][j][k+z]!=true)
+                            if(dersprogramlari[i][j][k+z]==true)
                             {
-                                Yenidersprogramlari[i][j][k]=false;
+                                Yenidersprogramlari[i][j][k]=true;
                                 break;
                             }
                             else
                             {
-                                Yenidersprogramlari[i][j][k]=true;
+                                Yenidersprogramlari[i][j][k]=false;
                             }
                         }
                     }
@@ -204,7 +204,7 @@ module.exports.post_dersProgramGrubIdIndex = function (req, res){
         for (let i = 0; i<dersprogramlari[0].length; i++) {//5 gün sayisi
             for(let j=0; j<dersprogramlari[0][0].length; j++){//16 saat sayisi
                 for(let k=0; k<dersprogramlari.length; k++){//2 kisi sayisi
-                    if(dersprogramlari[k][i][j]){
+                    if(!dersprogramlari[k][i][j]){
                         sayac++;
                         denemedizisi[i][j][k]=results.grup.people[k];
                     }else{
