@@ -108,6 +108,7 @@ module.exports.get_profil = function(req, res){
     let detaylar=new Array();
 let flag=true;
 let counter = 0;
+let sayac=0;
     query={programId: grupID}
     //for loop for every grup
     for(let a=0;a<1;a++){
@@ -130,14 +131,15 @@ let counter = 0;
             }
             }
             if(!flag){
-            detaylar[counter]={grupID:grupID,interval:interval,gun:gun,saat:saat}            
-            counter++;
+            detaylar[sayac]={grupID:grupID,interval:interval,gun:gun,saat:saat}
+            sayac++;
             if(counter==1){
               console.log(detaylar);
               console.log("gonderme");
               res.render('PrivateApp/profil', {len: i,detaylar:detaylar});
             }
             }
+            counter++;
             })
         }
       }
