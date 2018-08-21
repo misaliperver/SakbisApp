@@ -30,15 +30,14 @@ $(document).ready(function(){
 
                             if(j<10) gline = 't'+ j  + i;
                             else gline = 't'+ gindex + i;
-                            if(response.saatler[i][j]=="1")  
                             $("#"+gline).text("%" + Math.floor((response.saatler[i][j] / response.toplamKisi) * 100));
                     }
                 }
             },
             error: function() {
-               
+
             }
-        }); 
+        });
     });
 
     $('#btn_photo').on('click', function(){
@@ -56,7 +55,7 @@ $(document).ready(function(){
                 alert('silindi');
             },
             error: function() {
-               
+
             }
         });
     });

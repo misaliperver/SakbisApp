@@ -24,11 +24,12 @@ router.get('/grup/:programID',privateController.get_dersProgramGrubIdIndex);
 router.post('/grup/:programID',privateController.post_dersProgramGrubIdIndex);
 router.delete('/grup/:programID',privateController.delete_dersProgramGrubIdIndex);
 
+
 router.get('/searchtoPeer/:peerID',privateController.get_searchtoPeer);
 router.get('/profil', privateController.get_profil);
 router.get('/profil/ayarlar', privateController.get_profilAyarlar);
 router.post('/profil/ayarlar', privateController.post_profilAyarlar);
-
+router.get('/profil/duyuru',privateController.get_duyuru);
 
 
 router.get('/search/', privateController.get_ProfilOtherID);

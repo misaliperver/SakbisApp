@@ -154,7 +154,18 @@ else if(windowLoc === '/userApp/Profil'){
                 aciklama_matris[4] = new Array(16);
                 return aciklama_matris;
 }
-
+// $.ajax({
+//      url: '/profil/duyuru',
+//      method: 'GET',
+//      dataType: 'json',
+//      success: function(response){
+//        response.detaylar;
+//
+//      },
+//      error: function() {
+//          alert("Server'la bağlantı kurulamadı!")
+//      }
+//  });
 
        $.ajax({
             url: '/userApp/dersprogramivarmi',
@@ -175,7 +186,6 @@ else if(windowLoc === '/userApp/Profil'){
               }
                if(response.dersProgrami!==null){
                     matris = response.dersProgrami;
-
                     let line="";
                     let index ="";
                     for(var i=0; i<5; i++){
@@ -196,18 +206,16 @@ else if(windowLoc === '/userApp/Profil'){
                               if(typeof aciklama_matris[i][j]!='undefined'&&aciklama_matris[i][j]!=null&&matris[i][j]==true)
                               $("#"+line).text(aciklama_matris[i][j]);
                             }
-                              else {
+                              else{
                               //    $("#"+line).text("aciklama");
                               }
                         }
-
                   }
 }
 
                else{
                 matrisKur();
                }
-
             },
             error: function() {
                 alert("Server'la bağlantı kurulamadı!")

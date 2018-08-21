@@ -2,6 +2,7 @@ var path = require('path'); //path modülünü ekledik
 var Matris = require('../model/dersprogrami');
 var User = require('../model/user');
 var Grup = require('../model/GrupProgrami');
+var Duyuru = require('../model/duyuru');
 var passport = require('passport');
 
 module.exports.get_dersProgramiEkle = function(req, res){
@@ -100,8 +101,52 @@ module.exports.get_profil = function(req, res){
     if(req.user.username) i++; if(req.user.password) i++;if(req.user.ad)  i++;if(req.user.soyad) i++;
     if(req.user.yas)  i++;if(req.user.userimg)  i++;if(req.user.telno)  i++;
     if(req.user.unibolum) i++;if(req.user.bio)  i++;   if(req.user.cinsiyet)i++;
+    let grupID='b141210081-AMgK8WXdAlte2sJ0';
+    let interval=2;//2 saatlik bulusma
+    let gun=3;//perşembe
+    let saat=4;//9+4ün saatten baslar
+    let detaylar=new Array();
+let flag=true;
+let counter = 0;
+    query={programId: grupID}
+    //for loop for every grup
+    for(let a=0;a<1;a++){
+    Grup.findOne(query,function(err,grup){
+      if(err)
+      throw err;
+      for(const item of grup.people){
+        if(req.user.username==grup.people){
+          Matris.findOne({username:req.user.username},function(err,matris){
+            if(err)
+            throw err;
+            flag=true;
+            for(let j=0;j<interval;j++){
+            if(matris.matris[gun][saat+j]){
+              flag=true;
+              break;
+            }
+            else{
+              flag=false;
+            }
+            }
+            if(!flag){
+            detaylar[counter]={grupID:grupID,interval:interval,gun:gun,saat:saat}            
+            counter++;
+            if(counter==1){
+              console.log(detaylar);
+              console.log("gonderme");
+              res.render('PrivateApp/profil', {len: i,detaylar:detaylar});
+            }
+            }
+            })
+        }
+      }
+    })
+  }
+}
 
-    res.render('PrivateApp/profil', {len: i});
+module.exports.get_duyuru = function (req, res){
+
 
 }
 
