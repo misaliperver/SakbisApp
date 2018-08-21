@@ -139,9 +139,10 @@ let sayac=0;
               res.render('PrivateApp/profil', {len: i,detaylar:detaylar});
             }
             }
-            counter++;
+
             })
         }
+        counter++;
       }
     })
   }
