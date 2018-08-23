@@ -40,6 +40,7 @@
 
                         </ul>
                     </div>
+
                 </div>
         </div>
         <!-- Process2-Alanı -->
@@ -75,7 +76,7 @@
                         </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" id="duyurular">
         <h6>duyurular</h6>
         <ul class="list-group">
         <% if(typeof detaylar !== 'undefined'){%>
@@ -84,6 +85,8 @@
                    <a class="text-primary"><%= detaylar.grupID %> </a>
                    <a class="text-danger"><%= detaylar.gun %> <%= detaylar.saat %></a>
                  <a class="text-primary"><%= detaylar.interval %> </a></li>
+                 <button type="button" id="<%=detaylar.programId%>">Onayla</button>
+
               <% }); %>
         <% }%>
         </ul>

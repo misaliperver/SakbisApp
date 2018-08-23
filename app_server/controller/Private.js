@@ -98,59 +98,100 @@ module.exports.put_Ajax_aciklamaEkle = function(req, res){
 
 module.exports.get_profil = function(req, res){
     var i=0;
+      let detaylar=new Array();
     if(req.user.username) i++; if(req.user.password) i++;if(req.user.ad)  i++;if(req.user.soyad) i++;
     if(req.user.yas)  i++;if(req.user.userimg)  i++;if(req.user.telno)  i++;
     if(req.user.unibolum) i++;if(req.user.bio)  i++;   if(req.user.cinsiyet)i++;
-    let grupID='b141210081-AMgK8WXdAlte2sJ0';
-    let interval=2;//2 saatlik bulusma
-    let gun=3;//perşembe
-    let saat=4;//9+4ün saatten baslar
-    let detaylar=new Array();
-let flag=true;
-let counter = 0;
-let sayac=0;
-    query={programId: grupID}
-    //for loop for every grup
-    for(let a=0;a<1;a++){
-    Grup.findOne(query,function(err,grup){
-      if(err)
-      throw err;
-      for(const item of grup.people){
-        if(req.user.username==grup.people){
-          Matris.findOne({username:req.user.username},function(err,matris){
+    Duyuru.find(function(err,duyurular)
+  {
+    if(err)
+    throw err;
+    if(duyurular.length==0) {
+        res.render('PrivateApp/profil', {len: i,detaylar:detaylar});
+    }
+    let flag=true;
+    let counter = 0;
+    let sayac=0;
+    for(let a=0;a<duyurular.length;a++)
+    {
+      console.log(duyurular.length);
+      let grupID=duyurular[a].programId;
+      let interval=duyurular[a].interval;//2 saatlik bulusma
+      let gun=duyurular[a].gun;//perşembe
+      let saat=duyurular[a].saat;//9+4ün saatten baslar
+          query={programId: grupID}
+          Grup.findOne(query,function(err,grup){
             if(err)
             throw err;
-            flag=true;
-            for(let j=0;j<interval;j++){
-            if(matris.matris[gun][saat+j]){
-              flag=true;
-              break;
+            for(const item of grup.people){
+              if(req.user.username==item){
+                Matris.findOne({username:req.user.username},function(err,matris){
+                  if(err)
+                  throw err;
+                  flag=true;
+                  for(let j=0;j<interval;j++){
+                  if(matris.matris[gun][saat+j]){
+                    flag=true;
+                    break;
+                  }
+                  else{
+                    flag=false;
+                  }
+                  }
+                  if(!flag){
+                  detaylar[sayac]={programId:grupID,interval:interval,gun:gun,saat:saat}
+                  sayac++;
+                  console.log("sayac  :"+sayac);
+                    }
+                  })
+              }
+
+
             }
-            else{
-              flag=false;
-            }
-            }
-            if(!flag){
-            detaylar[sayac]={grupID:grupID,interval:interval,gun:gun,saat:saat}
-            sayac++;
-            if(counter==1){
+            counter++;
+            if(counter==duyurular.length){
               console.log(detaylar);
               console.log("gonderme");
               res.render('PrivateApp/profil', {len: i,detaylar:detaylar});
             }
-            }
 
-            })
-        }
-        counter++;
-      }
-    })
+          })
+    }
+  });
+    }
+
+module.exports.post_duyuruonayla = function (req, res){
+  let matris;
+  let aciklama;
+console.log(req.body.id);
+Duyuru.findOne({programId:req.body.id},function(err,duyuru){
+  if(err)
+  throw err;
+  if(duyuru!==null){
+  Matris.findOne({username:req.user.username},function(err,dersprogrami){
+matris=dersprogrami.matris;
+aciklama=dersprogrami.aciklama;
+    if(err)
+    throw err;
+    for(let i=0;i<duyuru.interval;i++){
+    matris[duyuru.gun][duyuru.saat+i]=true;
+    aciklama[duyuru.gun][duyuru.saat+i]="etkinlik";
   }
+  Matris.findOneAndUpdate({username: req.user.username}, {
+      matris: matris,
+      aciklama:aciklama
+    }, function(err, rawResponse) {
+      if (err){
+          throw err;}
+
+   });
+
+
+    //gun saat interval programId
+  });
 }
-
-module.exports.get_duyuru = function (req, res){
-
-
+  });
+res.redirect('/userApp/Profil');
 }
 
 /*
@@ -294,13 +335,13 @@ module.exports.get_dersProgramGrubOlustur = function(req, res){
     res.render('PrivateApp/GrupProgrami/olustur', {ras: ran, date: fbugun.substring(0,16)});
 }
 module.exports.post_dersProgramGrubOlustur = function(req, res){
-    var username = req.user.username;
-    var title = req.body.title;
-    var issue = req.body.issue;
-    var startTime = req.body.startTime;
-    var finishTime = req.body.finishTime;
-    var people = req.body.people.split(" ");
-    var secret = true;
+    let username = req.user.username;
+    let title = req.body.title;
+    let issue = req.body.issue;
+    let startTime = req.body.startTime;
+    let finishTime = req.body.finishTime;
+    let people = req.body.people.split(" ");
+    let secret = true;
     if(req.body.secret)  secret = true;
     else secret=false;
     req.checkBody('title', 'Başlık kısmı boş bırakılmamalıdır.').notEmpty();

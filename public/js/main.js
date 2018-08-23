@@ -154,6 +154,25 @@ else if(windowLoc === '/userApp/Profil'){
                 aciklama_matris[4] = new Array(16);
                 return aciklama_matris;
 }
+
+
+  $('#duyurular').on('click', function(){
+    let id = event.target.id;
+    console.log(id);
+$.ajax({
+   url: '/userApp/duyuruonayla',
+   method: 'POST',
+   contentType: 'application/json',
+   data: JSON.stringify({id: id}),
+   success: function(response) {
+       console.log(response);
+
+   },
+   error: function() {
+
+   }
+});
+});
 // $.ajax({
 //      url: '/profil/duyuru',
 //      method: 'GET',
