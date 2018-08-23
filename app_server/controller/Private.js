@@ -194,35 +194,6 @@ aciklama=dersprogrami.aciklama;
 res.redirect('/userApp/Profil');
 }
 
-/*
-module.exports.get_ikiKisilikKarsilastirma = function(req,res){
-    var searchUsername = req.body.searchUsername; // aranacak kişi
-    var saat = 17 - parseInt(req.body.saat); // 17-n
-    var seMatris;
-    var myMatris;
-    Matris.findOne({username: searchUsername}, function (err, seDersProgrami) {
-        if(err) throw err;
-        if(seDersProgrami){
-            Matris.findOne({username: req.user.username}, function (err, myDersProgrami) {
-                if(err) throw err;
-                if(myDersProgrami){
-                    for(var i=0; i<5; i++){
-                        for(var j=0; j<saat; j++){
-                            myMatris =   myDersProgrami.matris[i][j] && myDersProgrami.matris[i][j+1];
-                            seMatris =   seDersProgrami.matris[i][j] && seDersProgrami.matris[i][j+1];
-                        }
-                    }
-                }else{
-                    console.log('Senin kayıtlı bir ders programın yok.')
-                }
-            });
-        }else{
-            console.log('Aradığın kişinin kayıtlı bir ders programı yok. ')
-        }
-    });
-
-}
-*/
 const getUser = async (query) => {
   const grup= await Grup.findOne(query);
     let dersprogramlariARRAY=new Array(grup.people.length);
@@ -425,23 +396,55 @@ module.exports.get_searchtoPeer = function(req, res){
 
 module.exports.get_ProfilOtherID = function(req, res){
     var arananID = req.url.substring(22,32);
+    if(arananID===req.user.username){
+        res.redirect('/userApp/Profil');
+    } else{
+        User.getPeerUserByID(arananID, function(err, peer){
+            if(err) throw err;
+            if(peer){
+                var i=0;
+                i++;//pasport için
+                if(peer.username) i++;  if(peer.ad)       i++; if(peer.soyad)   i++;
+                if(peer.yas)      i++;  if(peer.userimg)  i++; if(peer.telno)   i++;
+                if(peer.unibolum) i++;  if(peer.bio)      i++; if(peer.cinsiyet)i++;
+                Matris.getUserByUsername(arananID, function(err, dersProgrami){
+                    if(err) throw err;
+                    if(dersProgrami){
+                        peer['dersProgrami']= dersProgrami;
+                    }
+                    res.render('PrivateApp/peer', {peer: peer, len:i})
+                });
+            }else{
+                res.render('PrivateApp/peer', {msg: "Böyle biri yok"})
+            }
+        })
+    }
+}
 
+module.exports.get_Ajax_searchtoPeer = function(req, res){
+    var arananID = req.params.peerID;
     User.getPeerUserByID(arananID, function(err, peer){
         if(err) throw err;
         if(peer){
-            var i=0;
-            if(peer.username) i++; if(peer.password) i++;if(peer.ad)  i++;if(peer.soyad) i++;
-            if(peer.yas)  i++;if(peer.userimg)  i++;if(peer.telno)  i++;
-            if(peer.unibolum) i++;if(peer.bio)  i++;   if(peer.cinsiyet)i++;
             Matris.getUserByUsername(arananID, function(err, dersProgrami){
                 if(err) throw err;
                 if(dersProgrami){
-                    peer['dersProgrami']= dersProgrami;
+                    Matris.getUserByUsername(req.user.username, function(err, myDersProgrami){
+                        if(err) throw err;
+                        if(myDersProgrami){
+                            var xuser = req.user;
+                            xuser['password'] = undefined;
+                            res.json({peer:peer, xuser:xuser, xusermatris:myDersProgrami, peermatris: dersProgrami});
+                        }else{
+                            res.json({msg:"Önce bir ders programı eklemelisin"});
+                        }
+                    });
+                }else{
+                    res.json({msg:"Aradığın kişinin bir dersprogramı kaydı yok"});
                 }
-                res.render('PrivateApp/peer', {peer: peer, len:i})
             });
         }else{
-            res.render('PrivateApp/peer', {msg: "Böyle biri yok"})
+            res.json({msg: "Böyle biri yok"})
         }
     })
 }

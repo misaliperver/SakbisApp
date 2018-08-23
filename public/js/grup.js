@@ -30,7 +30,19 @@ $(document).ready(function(){
 
                             if(j<10) gline = 't'+ j  + i;
                             else gline = 't'+ gindex + i;
-                            $("#"+gline).text("%" + Math.floor((response.saatler[i][j] / response.toplamKisi) * 100));
+                            var yuzdesi =Math.floor((response.saatler[i][j] / response.toplamKisi) * 100)
+                            if(yuzdesi==100) $("#"+gline).css("background-color", "#79d37b"); 
+                            else if(yuzdesi<100 && yuzdesi>=90) $("#"+gline).css("background-color", "#9af395"); 
+                            else if(yuzdesi<90 && yuzdesi>=80) $("#"+gline).css("background-color", "#b2b100"); 
+                            else if(yuzdesi<80 && yuzdesi>=70) $("#"+gline).css("background-color", "#ccff66"); 
+                            else if(yuzdesi<70 && yuzdesi>=60) $("#"+gline).css("background-color", "#ffff66"); 
+                            else if(yuzdesi<60 && yuzdesi>=50) $("#"+gline).css("background-color", "#ffcc00"); 
+                            else if(yuzdesi<50 && yuzdesi>=30) $("#"+gline).css("background-color", "#ff9933"); 
+                            else if(yuzdesi<30 && yuzdesi>=10) $("#"+gline).css("background-color", "#ff6600"); 
+                            else if(yuzdesi<10 && yuzdesi>=0) $("#"+gline).css("background-color", "#ff0000"); 
+                               
+                           
+                            $("#"+gline).text("%" + yuzdesi); 
                     }
                 }
             },
