@@ -284,10 +284,16 @@ module.exports.post_dersProgramGrubIdIndex = function (req, res){
 }
 
 module.exports.delete_dersProgramGrubIdIndex = function(req, res){
-    Grup.removeGrupByProjectId(req.params.programID, function(err, thisGrup){
+    Grup.getGrupByProjectId(req.params.programID,function(err, grup){
         if(err) throw err;
-        res.json({msg: "silindi"});
+        if(grup.from === req.user.username){
+            Grup.removeGrupByProjectId(req.params.programID, function(err, thisGrup){
+                if(err) throw err;
+                res.json({msg: "silindi"});
+            })
+        }
     })
+    
 }
 
 module.exports.get_dersProgramGrubIndex = function(req, res){
@@ -372,7 +378,11 @@ module.exports.get_dersProgramGrubIdIndex = function(req, res){
         if(err) throw err;
         if(grup){ // Böyle bir grup varmı?
             if(grup.secret == false){ // Herkese açıksa
-                res.render('PrivateApp/GrupProgrami/detail', {grup});
+                if(grup.from === username){
+                    res.render('PrivateApp/GrupProgrami/detail', {grup});
+                }else{
+                   // res.render('PrivateApp/GrupProgrami/detail', {grup}); // Bu kısmı arama sekmesine yolayacaksın
+                }
             }else{ // Gizliyse açıksa
                 if(grup.from === username) res.render('PrivateApp/GrupProgrami/detail', {grup});
                 else{
@@ -420,6 +430,87 @@ module.exports.get_ProfilOtherID = function(req, res){
         })
     }
 }
+
+module.exports.get_grupGirisi = function(req, res){
+    Grup.getGrupLimit(function(err, gruplar){
+        if(err) throw err;
+        
+        console.log(gruplar[0].title)
+        if(gruplar){
+            res.render('PrivateApp/grupgirisi',{gruplar: gruplar});
+        }
+    })
+    
+}
+module.exports.get_Ajax_grupGirisi = function(req, res){
+    Grup.getGrupbyIDandSecret(req.params.grupID, function(err, result){
+        if(err) throw err;
+        if(result){
+            res.json({gruplar: result})
+        }
+    })
+   
+}
+module.exports.get_grupGirisiThis = function(req, res){
+    var arananID = req.url.substring(29,56);
+    var username = req.user.username;
+    Grup.getGrupByProjectId(arananID, function(err, grup){
+        if(err) throw err;
+        if(grup){ // Böyle bir grup varmı?
+            if(grup.secret == false){ // Herkese açıksa
+                if(grup.from === username) res.redirect('/userApp/grup/' + arananID);
+                else  res.render('PrivateApp/GrupProgrami/searchgrup', {grup:grup});
+               
+            }else{ // Gizliyse açıksa
+                if(grup.from === username) res.redirect('/userApp/grup/' + arananID);
+                else{
+                    res.render('PrivateApp/GrupProgrami/searchgrup',{hata: 'Bu gruba erişim izniniz yok.'});
+                }
+            }
+        }else{
+            res.render('PrivateApp/GrupProgrami/detail',{hata: "Böyle bir grup yok"});
+        }
+    })
+}
+module.exports.put_grupGirisiThis = function(req, res){
+    var arananID = req.params.grupID; console.log(arananID)
+    var username = req.user.username;
+    Grup.getGrupByProjectId(arananID, function(err, grup){
+       if(err) throw err;
+       if(grup){
+           var juiss=false;
+            for(var i=0; i<grup.people.length; i++){
+                if(username === grup.people[i]){
+                    console.log('Senn  zaten varsın')
+                    res.json({msg: 'Bu gruba daha önceden dahil olmuşsun.'})
+                    juiss = true;
+                }
+            }
+            if(juiss == false){
+                Matris.getUserByUsername(username, function(err, matrisso){
+                    if(err) throw err;
+                    if(matrisso){
+                        grup.people.push(username);
+                        Grup.findOneAndUpdate({programId: arananID}, {
+                            people:  grup.people,                   
+                            }, function(err, rawResponse) {
+                            if (err){ msg= 'Dahil etme işlemi yapılırken bir hata meydana geldi.';  throw err;}
+                            else {msg= 'Tebrikler! Artık sende bu grubdasın.'; }
+                            res.json({msg});
+                        });
+                    } else{
+                        res.json({msg: "Önce ders programınızı girmeliniz."});
+                    }
+                })
+            }
+           
+       }else{
+            res.json({msg: 'Böyle Bir Grup Yok.'})
+       }
+    })
+}
+
+// dahil olmaktan kurtul :D eklenecek
 
 module.exports.get_Ajax_searchtoPeer = function(req, res){
     var arananID = req.params.peerID;

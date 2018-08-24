@@ -1,0 +1,21 @@
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-12">
+            <form class="form-inline my-2 my-lg-0  mr-3" action="/userApp/grupgirisi/this/">
+                <input name="grupGirisi" list="grupGirisiList" type="search" class="form-control" id="grupGirisiCek" placeholder="Bir grup bul...">
+                <datalist id="grupGirisiList">
+                </datalist>
+            </form>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-12">
+            <ul class="list-group list-inline">
+                <%gruplar.forEach(function(grup){%>
+                    <li onclick="console.log('merhaa')" class="list-group-item mt-1"><a class="text-primary" style="float: left"><%=grup.title%></a> <a style="float: right"><%=grup.programId%></a><hr style="clear:both"> <a ><%=grup.issue%></a></li>
+                <%});%>
+
+            </ul>
+        </div>
+    </div>
+</div>

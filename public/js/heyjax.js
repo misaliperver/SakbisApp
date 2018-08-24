@@ -57,5 +57,42 @@ $(document).ready(function(){
         });
     });
 
+    
+    $('#grupGirisiCek').keypress(function(e){
+        $.ajax({
+            url: '/userApp/searchtoGrup/' + $('#grupGirisiCek').val() + String.fromCharCode(e.which),
+            method: 'GET',
+            dataType: 'json',
+            success: function(response){
+                console.log(response); 
+                $("#grupGirisiList").html('');
+                for(var i=0; i< response.gruplar.length; i++){
+                    console.log('girdi')
+                    
+                    $("#grupGirisiList").append("<option value='"+response.gruplar[i].programId+"'>"+response.gruplar[i].title+ "</option>");
+                }
+            },
+            error: function() {
+                alert("Server'la bağlantı kurulamadı!")
+            }
+        });
+        
+    });
 
+    $('#btn_grupgirisiDahilol').on('click', function(){
+        console.log($(location).attr('href').split('/')[6].substring(12,39))
+        $.ajax({
+            url: '/userApp/grupgirisi/this/' + $(location).attr('href').split('/')[6].substring(12,39),
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify({}),
+            success: function(response) {
+                console.log(response);
+                alert(response.msg)
+            },
+            error: function() {
+                alert(response.msg)
+            }
+        });
+    })
 });

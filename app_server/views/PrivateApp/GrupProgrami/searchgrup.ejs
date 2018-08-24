@@ -1,0 +1,68 @@
+<div class="container">
+        <div class="row">
+            <%if(typeof grup === 'undefined'){ %>
+            <div><%= hata%></div>
+            <%}else{ %>
+                <div class="card mb-3">
+                    <div id="grupimg"><img class="card-img-top" src="/img/image-780x180.jpg" alt="Card image cap"></div>
+                    <div id="grupmatris" class="card-top" style="display:none;">
+                        <table class="table">
+                            <thead class="bg-dark text-light text-center">
+                                <tr class="d-flex"><th class="col-2 text-left">Saat/Gün</th><th class="col-2">Pazartesi</th><th class="col-2">Salı</th><th class="col-2">Çarşamba</th><th class="col-2">Perşembe</th><th class="col-2">Cuma</th></tr>
+                            </thead>
+                        </table>
+                        <div style="margin-top:-18px;height: 295px; overflow: auto">
+                                <table class="table">
+                                    <tbody id="tableMatris">
+                                        <%for(var i=0; i<16-parseInt(grup.interval); i++){%>
+                                            <tr class='d-flex'><th class='col-2 bg-secondary text-light' scope='row'><%= i+7%> :00 - <%=i+7+ parseInt(grup.interval)%> :00</th>
+                                       <% for(var j=0; j<5; j++){ 
+                                               
+                                                    var gline="";
+                                                    var gindex ="";
+                                                    if(i==10) gindex='A';
+                                                    else if(i==11) gindex='B';
+                                                    else if(i==12) gindex='C';
+                                                    else if(i==13) gindex='D';
+                                                    else if(i==14) gindex='E';
+                                                    else if(i==15) gindex='F';
+                            
+                                                    if(i<10) gline = 't'+ i +''+ j;
+                                                    else gline = 't'+ gindex + j; %>
+                                                
+                                       <td id='<%=gline%>' class='col-2'  >n1</td>
+                        
+                                        <%}%>
+                                        
+                                        <%}%>
+                                    </tbody>
+                                </table>
+                            </div></div>
+                    <div class="card-body">
+                            <div class="float-right"><a class="float-right "><%= grup.startTime.getDay()%>/<%= grup.startTime.getMonth()%>/<%= grup.startTime.getFullYear()%> - <%= grup.finishTime.getDay()%>/<%= grup.finishTime.getMonth()%>/<%= grup.finishTime.getFullYear()%></a></div>
+                        <span class="badge badge-pill badge-danger"><span id="interval"><%= grup.interval%></span> saat için</span>
+                        <% if(grup.secret == false){%><span class="badge badge-pill badge-success ">Açık Link</span><% }else{%><span class="badge badge-pill badge-warning ">Gizli Link</span><% }%>
+                        <span class="badge badge-pill badge-primary"><span id="kisiler">Listeye <%=grup.people.length%> kişi eklendi</span></span>
+                        <h5 class="card-title text-primary float-left"><%= grup.title%> &nbsp; &nbsp;</h5>
+    
+                        <p class="card-text" style="clear: both;"><%= grup.issue%></p>
+    
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text"><small class="text-muted">kimlik: <i><%= grup.programId%></i></small> 
+                            <button class="btn btn-success float-right"id="btn_grupgirisiDahilol">Dahil Ol!</button>
+                        </p>
+                    </div>
+                </div>
+               
+                <!--<form method="post" action="/userApp/grup/<%= grup.programId%>">
+                  <input id="programId" type="text" name="programId" value="<%= grup.programId%>">
+                  <input id="interval" type="text" name="interval" value="<%= grup.interval%>">
+                 
+                </form> !-->
+            <%}%>
+    
+            
+        </div>
+    </div>
+    

@@ -24,6 +24,11 @@ router.get('/grup/:programID',privateController.get_dersProgramGrubIdIndex);
 router.post('/grup/:programID',privateController.post_dersProgramGrubIdIndex);
 router.delete('/grup/:programID',privateController.delete_dersProgramGrubIdIndex);
 
+router.get('/searchtoGrup/:grupID', privateController.get_Ajax_grupGirisi);
+router.get('/grupgirisi/this/', privateController.get_grupGirisiThis);
+router.put('/grupgirisi/this/:grupID', privateController.put_grupGirisiThis);
+router.get('/grupgirisi', privateController.get_grupGirisi);
+
 
 router.get('/searchtoPeer/:peerID',privateController.get_searchtoPeer);
 router.get('/profil', privateController.get_profil);

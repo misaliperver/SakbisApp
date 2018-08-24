@@ -42,9 +42,11 @@
             <li class="nav-item active">
               <a class="nav-link" href="/">Anasayfa <span class="sr-only">(current)</span></a>
             </li>
+            <% if(user){%>
             <li class="nav-item">
-              <a class="nav-link" href="#">Hakkımızda</a>
+              <a class="nav-link" href="/userApp/grupgirisi">Grub Girişi</a>
             </li>
+            <% } else{ %> <% } %>
             <li class="nav-item">
               <a class="nav-link disabled"  data-toggle="modal" data-target="#Kullanimsartlari">Kullanım Şartları</a>
             </li>

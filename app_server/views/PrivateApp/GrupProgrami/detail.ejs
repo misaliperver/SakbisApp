@@ -42,6 +42,7 @@
                         <div class="float-right"><a class="float-right "><%= grup.startTime.getDay()%>/<%= grup.startTime.getMonth()%>/<%= grup.startTime.getFullYear()%> - <%= grup.finishTime.getDay()%>/<%= grup.finishTime.getMonth()%>/<%= grup.finishTime.getFullYear()%></a></div>
                     <span class="badge badge-pill badge-danger"><span id="interval"><%= grup.interval%></span> saat için</span>
                     <% if(grup.secret == false){%><span class="badge badge-pill badge-success ">Açık Link</span><% }else{%><span class="badge badge-pill badge-warning ">Gizli Link</span><% }%>
+                    <span class="badge badge-pill badge-primary"><span id="kisiler">Listeye <%=grup.people.length%> kişi eklendi</span></span>
                     <h5 class="card-title text-primary float-left"><%= grup.title%> &nbsp; &nbsp;</h5>
 
                     <p class="card-text" style="clear: both;"><%= grup.issue%></p>
