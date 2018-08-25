@@ -26,7 +26,8 @@ router.delete('/grup/:programID',privateController.delete_dersProgramGrubIdIndex
 
 router.get('/searchtoGrup/:grupID', privateController.get_Ajax_grupGirisi);
 router.get('/grupgirisi/this/', privateController.get_grupGirisiThis);
-router.put('/grupgirisi/this/:grupID', privateController.put_grupGirisiThis);
+router.put('/grupgirisi/thisac/:grupID', privateController.put_grupGirisiThisAccept);
+router.put('/grupgirisi/thisdisac/:grupID', privateController.put_grupGirisiThisDisaccept);
 router.get('/grupgirisi', privateController.get_grupGirisi);
 
 

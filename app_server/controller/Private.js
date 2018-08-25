@@ -458,13 +458,34 @@ module.exports.get_grupGirisiThis = function(req, res){
         if(err) throw err;
         if(grup){ // Böyle bir grup varmı?
             if(grup.secret == false){ // Herkese açıksa
-                if(grup.from === username) res.redirect('/userApp/grup/' + arananID);
-                else  res.render('PrivateApp/GrupProgrami/searchgrup', {grup:grup});
-               
-            }else{ // Gizliyse açıksa
-                if(grup.from === username) res.redirect('/userApp/grup/' + arananID);
-                else{
-                    res.render('PrivateApp/GrupProgrami/searchgrup',{hata: 'Bu gruba erişim izniniz yok.'});
+                if(grup.from === username){ // Grubun kurucusu musun?
+                    res.redirect('/userApp/grup/' + arananID);
+                }else{
+                    var varmi = false;
+                    grup.people.forEach(function(person){
+                        if(person === username){ // Bu gruba ekli misin?
+                            varmi = true;
+                            res.render('PrivateApp/GrupProgrami/searchgrup', {grup:grup, varsin:true});
+                        }
+                    })        
+                    if(varmi==false){
+                        res.render('PrivateApp/GrupProgrami/searchgrup', {grup:grup});
+                    }           
+                }                
+            }else{ // Gizliyse
+                if(grup.from === username){ // Grubun kurucusu musun?
+                    res.redirect('/userApp/grup/' + arananID);
+                }else{
+                    var varmi = false;
+                    grup.people.forEach(function(person){
+                        if(person === username){ // Bu gruba ekli misin?
+                            varmi = true;
+                            res.render('PrivateApp/GrupProgrami/searchgrup', {grup:grup, varsin:true});
+                        }
+                    }) 
+                    if(varmi==false){
+                        res.render('PrivateApp/GrupProgrami/searchgrup',{hata: 'Bu gruba erişim izniniz yok.'});      
+                    }  
                 }
             }
         }else{
@@ -472,20 +493,19 @@ module.exports.get_grupGirisiThis = function(req, res){
         }
     })
 }
-module.exports.put_grupGirisiThis = function(req, res){
+module.exports.put_grupGirisiThisAccept = function(req, res){
     var arananID = req.params.grupID; console.log(arananID)
     var username = req.user.username;
     Grup.getGrupByProjectId(arananID, function(err, grup){
        if(err) throw err;
        if(grup){
-           var juiss=false;
-            for(var i=0; i<grup.people.length; i++){
-                if(username === grup.people[i]){
-                    console.log('Senn  zaten varsın')
+            var juiss=false;
+            grup.people.forEach(function(person){
+                if(username === person){
                     res.json({msg: 'Bu gruba daha önceden dahil olmuşsun.'})
                     juiss = true;
                 }
-            }
+            })
             if(juiss == false){
                 Matris.getUserByUsername(username, function(err, matrisso){
                     if(err) throw err;
@@ -504,6 +524,35 @@ module.exports.put_grupGirisiThis = function(req, res){
                 })
             }
            
+       }else{
+            res.json({msg: 'Böyle Bir Grup Yok.'})
+       }
+    })
+}
+module.exports.put_grupGirisiThisDisaccept = function(req, res){
+    var arananID = req.params.grupID; console.log(arananID)
+    var username = req.user.username;
+    Grup.getGrupByProjectId(arananID, function(err, grup){
+       if(err) throw err;
+       if(grup){
+            var juiss=false;
+            var sayac = 0;
+            grup.people.forEach(function(person){
+                if(username === person){
+                    juiss = true;
+                    grup.people.splice(sayac,1)
+                    Grup.findOneAndUpdate({programId: arananID}, {
+                        people:  grup.people,                   
+                        }, function(err, rawResponse) {
+                        if (err){ msg= 'Gruptan ayrılma işlemi yapılırken bir hata meydana geldi.';  throw err;}
+                        else {msg= 'Çok üzüldük! Artık bu gruba dahil değilsin.'; }
+                        res.json({msg});
+                    });
+                }sayac++;
+            })  
+            if(juiss==false){
+                res.json({msg: 'İlginç! Zaten gruba dahil değilsin.'})
+            }         
        }else{
             res.json({msg: 'Böyle Bir Grup Yok.'})
        }

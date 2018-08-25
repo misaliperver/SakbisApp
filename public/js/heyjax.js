@@ -82,7 +82,23 @@ $(document).ready(function(){
     $('#btn_grupgirisiDahilol').on('click', function(){
         console.log($(location).attr('href').split('/')[6].substring(12,39))
         $.ajax({
-            url: '/userApp/grupgirisi/this/' + $(location).attr('href').split('/')[6].substring(12,39),
+            url: '/userApp/grupgirisi/thisac/' + $(location).attr('href').split('/')[6].substring(12,39),
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify({}),
+            success: function(response) {
+                console.log(response);
+                alert(response.msg)
+            },
+            error: function() {
+                alert(response.msg)
+            }
+        });
+    })
+    $('#btn_grupgirisiAyril').on('click', function(){
+        console.log($(location).attr('href').split('/')[6].substring(12,39))
+        $.ajax({
+            url: '/userApp/grupgirisi/thisdisac/' + $(location).attr('href').split('/')[6].substring(12,39),
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify({}),
