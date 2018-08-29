@@ -23,6 +23,7 @@ router.post('/grup/olustur', privateController.post_dersProgramGrubOlustur);
 router.get('/grup/:programID',privateController.get_dersProgramGrubIdIndex);
 router.post('/grup/:programID',privateController.post_dersProgramGrubIdIndex);
 router.delete('/grup/:programID',privateController.delete_dersProgramGrubIdIndex);
+router.put('/grup/:programID',privateController.put_duyuruolustur);
 
 router.get('/searchtoGrup/:grupID', privateController.get_Ajax_grupGirisi);
 router.get('/grupgirisi/this/', privateController.get_grupGirisiThis);
@@ -36,8 +37,7 @@ router.get('/profil', privateController.get_profil);
 router.get('/profil/ayarlar', privateController.get_profilAyarlar);
 router.post('/profil/ayarlar', privateController.post_profilAyarlar);
 //router.get('/profil/duyuru',privateController.get_duyuru);
-router.post('/duyuruonayla',privateController.post_duyuruonayla)
-
+router.post('/duyuruonayla',privateController.post_duyuruonayla);
 router.get('/search/modal/:peerID',privateController.get_Ajax_searchtoPeer);
 router.get('/search/', privateController.get_ProfilOtherID);
 

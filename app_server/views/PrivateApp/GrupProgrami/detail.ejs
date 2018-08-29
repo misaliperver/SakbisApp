@@ -15,9 +15,9 @@
                             <table class="table">
                                 <tbody id="tableMatris">
                                     <%for(var i=0; i<16-parseInt(grup.interval); i++){%>
-                                        <tr class='d-flex'><th class='col-2 bg-secondary text-light' scope='row'><%= i+7%> :00 - <%=i+7+ parseInt(grup.interval)%> :00</th>
-                                   <% for(var j=0; j<5; j++){ 
-                                           
+                                        <tr class='d-flex'><th <div class='col-2 bg-secondary text-light' scope='row'><%= i+7%> :00 - <%=i+7+ parseInt(grup.interval)%> :00</div></th>
+                                   <% for(var j=0; j<5; j++){
+
                                                 var gline="";
                                                 var gindex ="";
                                                 if(i==10) gindex='A';
@@ -26,14 +26,14 @@
                                                 else if(i==13) gindex='D';
                                                 else if(i==14) gindex='E';
                                                 else if(i==15) gindex='F';
-                        
+
                                                 if(i<10) gline = 't'+ i +''+ j;
                                                 else gline = 't'+ gindex + j; %>
-                                            
-                                   <td id='<%=gline%>' class='col-2'  >n1</td>
-                    
+
+                                   <td <div id='<%=gline%>' class='col-2'  >>n1</div></td>
+
                                     <%}%>
-                                    
+
                                     <%}%>
                                 </tbody>
                             </table>
@@ -49,21 +49,23 @@
 
                 </div>
                 <div class="card-footer">
-                    <p class="card-text"><small class="text-muted">kimlik: <i><%= grup.programId%></i></small> 
+                    <p class="card-text"><small class="text-muted">kimlik: <i><%= grup.programId%></i></small>
                         <button class="btn btn-danger ml-1  float-right"id="btn_Sil">Sil</button>
                         <button class="btn btn-success float-right"id="btn_Karsilastir">Karşılaştır</button>
+                        <button class="btn btn-success float-right"id="btn_onayla" style="display:none;">Onayla</button>
                         <button class="btn btn-warning float-right"id="btn_photo" style="display:none;">Geri</button>
+
                     </p>
                 </div>
             </div>
-           
+
             <!--<form method="post" action="/userApp/grup/<%= grup.programId%>">
               <input id="programId" type="text" name="programId" value="<%= grup.programId%>">
               <input id="interval" type="text" name="interval" value="<%= grup.interval%>">
-             
+
             </form> !-->
         <%}%>
 
-        
+
     </div>
 </div>

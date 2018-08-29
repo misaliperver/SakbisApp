@@ -49,13 +49,14 @@ if(windowLoc === '/userApp/dersprogramiekle'){
                             else if(j==13) index='D';
                             else if(j==14) index='E';
                             else if(j==15) index='F';
-
+                            
                             if(j<10) line = 't'+ j  + i;
                             else line = 't'+ index + i;
                             if(matris[i][j]===true)
                             $("#"+line).css("background-color", "yellow");
                             if(typeof aciklama_matris[i]!='undefined'){
                               if(typeof aciklama_matris[i][j]!='undefined'&&aciklama_matris[i][j]!=null)
+                              if(matris[i][j]==true)
                               $("#"+line).text(aciklama_matris[i][j]);
                             }
                               else {

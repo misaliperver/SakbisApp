@@ -4,6 +4,40 @@ var User = require('../model/user');
 var Grup = require('../model/GrupProgrami');
 var Duyuru = require('../model/duyuru');
 var passport = require('passport');
+module.exports.put_duyuruolustur= function(req, res){
+  let programId    = req.body.programId;
+  let interval  = req.body.interval;
+  let gun = req.body.gun;
+  let saat= req.body.saat;
+  var msg = "";
+      Duyuru.findOne({programId: programId}, function (err, duyuru) {
+          if(duyuru){
+              Duyuru.findOneAndUpdate({programId: programId}, {
+                  programId: programId,
+                  interval:interval,
+                  gun: gun,
+                  saat: saat
+                }, function(err, rawResponse) {
+                  if (err){ msg= 'Güncellenemedi';  throw err;}
+                  else {msg= 'Güncelleme başarılı'; }
+                  res.json({msg});
+               });
+          }else{
+              var newDuyuru = new Duyuru({
+                programId: programId,
+                interval:interval,
+                gun: gun,
+                saat: saat
+              });
+              newDuyuru.save(function(err){
+                if (err){ msg = 'Yenisi oluşturululamadı'; throw err; }
+                else {msg= 'Yeni kayıt oluşturuldu.'; }
+              });
+              res.json({msg});
+          }
+      });
+
+}
 
 module.exports.get_dersProgramiEkle = function(req, res){
     res.render('PrivateApp/dersprogramiEkle');
@@ -123,11 +157,11 @@ module.exports.get_profil = function(req, res){
           Grup.findOne(query,function(err,grup){
             if(err)
             throw err;
-            for(const item of grup.people){
-              if(req.user.username==item){
                 Matris.findOne({username:req.user.username},function(err,matris){
                   if(err)
                   throw err;
+                  for(const item of grup.people){
+                    if(req.user.username==item){
                   flag=true;
                   for(let j=0;j<interval;j++){
                   if(matris.matris[gun][saat+j]){
@@ -143,18 +177,16 @@ module.exports.get_profil = function(req, res){
                   sayac++;
                   console.log("sayac  :"+sayac);
                     }
-                  })
-              }
+                  }
 
-
-            }
-            counter++;
-            if(counter==duyurular.length){
-              console.log(detaylar);
-              console.log("gonderme");
-              res.render('PrivateApp/profil', {len: i,detaylar:detaylar});
-            }
-
+                }//for const grup.people
+                counter++;
+                if(counter==duyurular.length){
+                  console.log(detaylar);
+                  console.log("gonderme");
+                  res.render('PrivateApp/profil', {len: i,detaylar:detaylar});
+                }
+              });
           })
     }
   });
@@ -293,7 +325,7 @@ module.exports.delete_dersProgramGrubIdIndex = function(req, res){
             })
         }
     })
-    
+
 }
 
 module.exports.get_dersProgramGrubIndex = function(req, res){
@@ -434,13 +466,13 @@ module.exports.get_ProfilOtherID = function(req, res){
 module.exports.get_grupGirisi = function(req, res){
     Grup.getGrupLimit(function(err, gruplar){
         if(err) throw err;
-        
+
         console.log(gruplar[0].title)
         if(gruplar){
             res.render('PrivateApp/grupgirisi',{gruplar: gruplar});
         }
     })
-    
+
 }
 module.exports.get_Ajax_grupGirisi = function(req, res){
     Grup.getGrupbyIDandSecret(req.params.grupID, function(err, result){
@@ -449,7 +481,7 @@ module.exports.get_Ajax_grupGirisi = function(req, res){
             res.json({gruplar: result})
         }
     })
-   
+
 }
 module.exports.get_grupGirisiThis = function(req, res){
     var arananID = req.url.substring(29,56);
@@ -467,11 +499,11 @@ module.exports.get_grupGirisiThis = function(req, res){
                             varmi = true;
                             res.render('PrivateApp/GrupProgrami/searchgrup', {grup:grup, varsin:true});
                         }
-                    })        
+                    })
                     if(varmi==false){
                         res.render('PrivateApp/GrupProgrami/searchgrup', {grup:grup});
-                    }           
-                }                
+                    }
+                }
             }else{ // Gizliyse
                 if(grup.from === username){ // Grubun kurucusu musun?
                     res.redirect('/userApp/grup/' + arananID);
@@ -482,10 +514,10 @@ module.exports.get_grupGirisiThis = function(req, res){
                             varmi = true;
                             res.render('PrivateApp/GrupProgrami/searchgrup', {grup:grup, varsin:true});
                         }
-                    }) 
+                    })
                     if(varmi==false){
-                        res.render('PrivateApp/GrupProgrami/searchgrup',{hata: 'Bu gruba erişim izniniz yok.'});      
-                    }  
+                        res.render('PrivateApp/GrupProgrami/searchgrup',{hata: 'Bu gruba erişim izniniz yok.'});
+                    }
                 }
             }
         }else{
@@ -512,7 +544,7 @@ module.exports.put_grupGirisiThisAccept = function(req, res){
                     if(matrisso){
                         grup.people.push(username);
                         Grup.findOneAndUpdate({programId: arananID}, {
-                            people:  grup.people,                   
+                            people:  grup.people,
                             }, function(err, rawResponse) {
                             if (err){ msg= 'Dahil etme işlemi yapılırken bir hata meydana geldi.';  throw err;}
                             else {msg= 'Tebrikler! Artık sende bu grubdasın.'; }
@@ -523,7 +555,7 @@ module.exports.put_grupGirisiThisAccept = function(req, res){
                     }
                 })
             }
-           
+
        }else{
             res.json({msg: 'Böyle Bir Grup Yok.'})
        }
@@ -542,17 +574,17 @@ module.exports.put_grupGirisiThisDisaccept = function(req, res){
                     juiss = true;
                     grup.people.splice(sayac,1)
                     Grup.findOneAndUpdate({programId: arananID}, {
-                        people:  grup.people,                   
+                        people:  grup.people,
                         }, function(err, rawResponse) {
                         if (err){ msg= 'Gruptan ayrılma işlemi yapılırken bir hata meydana geldi.';  throw err;}
                         else {msg= 'Çok üzüldük! Artık bu gruba dahil değilsin.'; }
                         res.json({msg});
                     });
                 }sayac++;
-            })  
+            })
             if(juiss==false){
                 res.json({msg: 'İlginç! Zaten gruba dahil değilsin.'})
-            }         
+            }
        }else{
             res.json({msg: 'Böyle Bir Grup Yok.'})
        }
