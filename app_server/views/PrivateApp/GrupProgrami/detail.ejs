@@ -1,4 +1,26 @@
 <div class="container">
+      <!-- Modal -->
+      <div class="modal fade" id="kimlergeliyorMODAL" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Detaylar</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Çıkış</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <ul class='custom-menu'>
+        <li data-action="second"><a data-toggle="modal" data-target="#kimlergeliyorMODAL">Detaylar </a></li>
+        <li data-action="third">Çıkış</li>
+    </ul>
     <div class="row">
         <%if(typeof grup === 'undefined'){ %>
         <div><%= hata%></div>

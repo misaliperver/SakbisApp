@@ -56,9 +56,12 @@
               <a class="nav-link disabled"  data-toggle="modal" data-target="#Kullanimsartlari">Kullanım Şartları</a>
             </li>
           </ul>
-          
+
           <form class="form-inline my-2 my-lg-0  mr-3" action="/userApp/search/">
             <% if(user){%>
+              <div>
+                <img src="/img/notif.png"/>
+              </div>
                   <input name="searchbyPeer" list="searchbyPeerLIST" type="search" class="form-control" id="searchbyPeer" placeholder="Biriyle karşılaştır...">
                   <datalist id="searchbyPeerLIST">
                   </datalist>
