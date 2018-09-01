@@ -36,7 +36,7 @@ router.get('/searchtoPeer/:peerID',privateController.get_searchtoPeer);
 router.get('/profil', privateController.get_profil);
 router.get('/profil/ayarlar', privateController.get_profilAyarlar);
 router.post('/profil/ayarlar', privateController.post_profilAyarlar);
-//router.get('/profil/duyuru',privateController.get_duyuru);
+router.get('/duyuru',privateController.get_duyuru);
 router.post('/duyuruonayla',privateController.post_duyuruonayla);
 router.get('/search/modal/:peerID',privateController.get_Ajax_searchtoPeer);
 router.get('/search/', privateController.get_ProfilOtherID);

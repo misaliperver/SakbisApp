@@ -132,61 +132,66 @@ module.exports.put_Ajax_aciklamaEkle = function(req, res){
 
 module.exports.get_profil = function(req, res){
     var i=0;
-    let detaylar = new Array();
+
     if(req.user.username) i++; if(req.user.password) i++;if(req.user.ad)  i++;if(req.user.soyad) i++;
     if(req.user.yas)  i++;if(req.user.userimg)  i++;if(req.user.telno)  i++;
     if(req.user.unibolum) i++;if(req.user.bio)  i++;   if(req.user.cinsiyet)i++;
-    Duyuru.find(function(err,duyurular){
-        if(err) throw err;
-        if(duyurular.length==0) {
-            res.render('PrivateApp/profil', {len: i,detaylar:detaylar});
-        }
-        let flag=true;
-        let counter = 0;
-        let sayac=0;
-        for(let a=0;a<duyurular.length;a++){
-            console.log(duyurular.length);
-            let grupID=duyurular[a].programId;
-            let interval=duyurular[a].interval;//2 saatlik bulusma
-            let gun=duyurular[a].gun;//perşembe
-            let saat=duyurular[a].saat;//9+4ün saatten baslar
-                query={programId: grupID}
-                Grup.findOne(query,function(err,grup){
-                    if(err) throw err;
-                    Matris.findOne({username:req.user.username},function(err,matris){
-                        if(err) throw err;
-                        for(const item of grup.people){
-                            if(req.user.username==item){
-                                flag=true;
-                                for(let j=0;j<interval;j++){
-                                    if(matris.matris[gun][saat+j]){
-                                        flag=true;
-                                        break;
-                                    }
-                                    else{
-                                        flag=false;
-                                    }
-                                }
-                                if(!flag){
-                                    detaylar[sayac]={programId:grupID,interval:interval,gun:gun,saat:saat}
-                                    sayac++;
-                                    console.log("sayac  :"+sayac);
-                                }
-                            }
 
-                        }//for const grup.people
-                        counter++;
-                        if(counter==duyurular.length){
-                            console.log(detaylar);
-                            console.log("gonderme");
-                            res.render('PrivateApp/profil', {len: i,detaylar:detaylar});
-                        }
-                    });
-                })
-        }
-    });
 }
 
+module.exports.get_duyuru=function (req,res) {
+    let detaylar = new Array();
+  Duyuru.find(function(err,duyurular){
+      if(err) throw err;
+      if(duyurular.length==0) {
+        res.json({lenght:detaylar.length ,detaylar:detaylar});
+      }
+      let flag=true;
+      let counter = 0;
+      let sayac=0;
+      for(let a=0;a<duyurular.length;a++){
+          console.log(duyurular.length);
+          let grupID=duyurular[a].programId;
+          let interval=duyurular[a].interval;//2 saatlik bulusma
+          let gun=duyurular[a].gun;//perşembe
+          let saat=duyurular[a].saat;//9+4ün saatten baslar
+              query={programId: grupID}
+              Grup.findOne(query,function(err,grup){
+                  if(err) throw err;
+                  Matris.findOne({username:req.user.username},function(err,matris){
+                      if(err) throw err;
+                      for(const item of grup.people){
+                          if(req.user.username==item){
+                              flag=true;
+                              for(let j=0;j<interval;j++){
+                                  if(matris.matris[gun][saat+j]){
+                                      flag=true;
+                                      break;
+                                  }
+                                  else{
+                                      flag=false;
+                                  }
+                              }
+                              if(!flag){
+                                  detaylar[sayac]={programId:grupID,interval:interval,gun:gun,saat:saat}
+                                  sayac++;
+                                  console.log("sayac  :"+sayac);
+                              }
+                          }
+
+                      }//for const grup.people
+                      counter++;
+                      if(counter==duyurular.length){
+                          console.log(detaylar);
+                          console.log("gonderme");
+                          res.json({lenght:detaylar.length ,detaylar:detaylar});
+                      }
+                  });
+              })
+      }
+  });
+
+}
 module.exports.post_duyuruonayla = function (req, res){
   let matris;
   let aciklama;
