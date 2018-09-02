@@ -136,7 +136,7 @@ module.exports.get_profil = function(req, res){
     if(req.user.username) i++; if(req.user.password) i++;if(req.user.ad)  i++;if(req.user.soyad) i++;
     if(req.user.yas)  i++;if(req.user.userimg)  i++;if(req.user.telno)  i++;
     if(req.user.unibolum) i++;if(req.user.bio)  i++;   if(req.user.cinsiyet)i++;
-
+    res.render('PrivateApp/profil', {len: i});
 }
 
 module.exports.get_duyuru=function (req,res) {
