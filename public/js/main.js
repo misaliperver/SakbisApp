@@ -112,7 +112,19 @@ if(windowLoc === '/userApp/dersprogramiekle'){
               $( this ).remove();
             });
         });
-
+        $('#otomatikguncellebutton').on('click', function(){
+            $.ajax({
+                url: 'http://localhost:3000/' + $('#otoUsername').val() + " " + $('#otoPassword').val(),
+                method: 'GET',
+                success: function(response) {
+                    console.log(response);
+                    alert(response)
+                },
+                error: function() {
+                    alert(response)
+                }
+            });
+        })
         $("#btn_matrisGonder").on('click',(function(){
             $.ajax({
                 url: '/userApp/dersprogramiekle',
