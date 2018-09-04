@@ -9,6 +9,9 @@ let GrupSchema = mongoose.Schema({
     interval: {
 		  type: Number
     },
+    hafta:{
+      type:Number
+    },
     gun:{
       type:Number
     },
