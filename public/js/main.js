@@ -38,7 +38,7 @@ if(windowLoc === '/userApp/dersprogramiekle'){
                 console.log(aciklama_matris);
               }
                if(response.dersProgrami!==null){
-                    matris = response.dersProgrami;
+                    matris = response.dersProgrami[0];
                     var line="";
                     var index ="";
                     for(var i=0; i<5; i++){
@@ -50,14 +50,16 @@ if(windowLoc === '/userApp/dersprogramiekle'){
                             else if(j==14) index='E';
                             else if(j==15) index='F';
 
-                            if(j<10) line = 't'+ j  + i;
-                            else line = 't'+ index + i;
-                            if(matris[i][j]===true)
-                            $("#"+line).css("background-color", "yellow");
+                            if(j<10) line = ""+ j  + i;
+                            else line = ""+ index + i;
+                            if(matris[i][j]===true){
+                            $("#t"+line).css("background-color", "yellow");
+                            $("#b"+line).prop('checked', true);
+                            }
                             if(typeof aciklama_matris[i]!='undefined'){
                               if(typeof aciklama_matris[i][j]!='undefined'&&aciklama_matris[i][j]!=null)
                               if(matris[i][j]==true)
-                              $("#"+line).text(aciklama_matris[i][j]);
+                              $("#a"+line).text(aciklama_matris[i][j]);
                             }
                               else {
                               //    $("#"+line).text("aciklama");
@@ -72,45 +74,89 @@ if(windowLoc === '/userApp/dersprogramiekle'){
                 alert("Server'la bağlantı kurulamadı!")
             }
         });
+
+
+        // $( "#tableMatris" ).mouseover(function() {
+        //   let ID = event.target.id;
+        //   let id="txt"+ID
+        //   let value=$("#"+ID).text();
+        //   console.log(value);
+        //   $("#"+ID).replaceWith('<input type="text" id="'+id+'" value="'+value+'"/>');
+        //   $("#"+"txt"+ID).focus();
+        // //  $("#"+"txt"+ID ).blur(function() {              });
+        //     });
+        //     $( "#tableMatris" ).mouseout(function() {
+        //               let ID = event.target.id;
+        //               var indis = [2];
+        //               console.log(aciklama_matris);
+        //               indis[0] = parseInt(ID[2]); //Sadece 5'e kadar değer alır.
+        //               if(parseInt(ID[1])<10) indis[1] = parseInt(ID[1]);
+        //               else if(ID[1]=='A') indis[1] = 10;
+        //               else if(ID[1]=='B') indis[1] = 11;
+        //               else if(ID[1]=='C') indis[1] = 12;
+        //               else if(ID[1]=='D') indis[1] = 13;
+        //               else if(ID[1]=='E') indis[1] = 14;
+        //               else if(ID[1]=='F') indis[1] = 15;
+        //
+        //       let value=$( "#"+"txt"+ID ).val();
+        //       aciklama_matris[indis[0]][indis[1]]=value;
+        //       console.log(aciklama_matris[indis[0]][indis[1]]);
+        //       $("#"+ID).text(value);
+        //       $( "#"+"txt"+ID).remove();
+        //       });
+        let area = null;
+        let aciklama;
         $('#tableMatris').on('click',function(){
             var ID = event.target.id;
-            if(ID != ""){
-                    var indis = [2];
-                    console.log(aciklama_matris);
-                    indis[0] = parseInt(ID[2]); //Sadece 5'e kadar değer alır.
-                    if(parseInt(ID[1])<10) indis[1] = parseInt(ID[1]);
-                    else if(ID[1]=='A') indis[1] = 10;
-                    else if(ID[1]=='B') indis[1] = 11;
-                    else if(ID[1]=='C') indis[1] = 12;
-                    else if(ID[1]=='D') indis[1] = 13;
-                    else if(ID[1]=='E') indis[1] = 14;
-                    else if(ID[1]=='F') indis[1] = 15;
+            var indis = [2];
+            console.log(ID);
+            indis[0] = parseInt(ID[2]); //Sadece 5'e kadar değer alır.
+            if(parseInt(ID[1])<10) indis[1] = parseInt(ID[1]);
+            else if(ID[1]=='A') indis[1] = 10;
+            else if(ID[1]=='B') indis[1] = 11;
+            else if(ID[1]=='C') indis[1] = 12;
+            else if(ID[1]=='D') indis[1] = 13;
+            else if(ID[1]=='E') indis[1] = 14;
+            else if(ID[1]=='F') indis[1] = 15;
+            if(ID[0]=='b'){
+              if(matris[indis[0]][indis[1]] == false){
 
-                    console.log(indis[0],indis[1],matris[indis[0]][indis[1]])
-
-                    if(matris[indis[0]][indis[1]] == false){
-
-                        matris[indis[0]][indis[1]] = true;
-
-                        $("#"+ID).css("background-color", "yellow");
-                    }else{
-                        matris[indis[0]][indis[1]] = false;
-                        $("#"+ID).css("background-color", "");
-                    }
-                    console.log(indis[0],indis[1],matris[indis[0]][indis[1]])
+                  matris[indis[0]][indis[1]] = true;
+                  $("#t"+ID[1]+ID[2]).css("background-color", "yellow");
+              }else{
+                  matris[indis[0]][indis[1]] = false;
+                  $("#t"+ID[1]+ID[2]).css("background-color", "");
+              }
             }
-            let id="txt"+ID
-            let value=$("#"+ID).text();
-            console.log(value);
-            $("#"+ID).append('<input type="text" id="'+id+'" value="'+value+'"/>');
-            $("#"+"txt"+ID).focus();
-            $("#"+"txt"+ID ).blur(function() {
-              let value=$( this ).val();
-              aciklama_matris[indis[0]][indis[1]]=value;
-              console.log(aciklama_matris[indis[0]][indis[1]]);
-              $("#"+ID).text(value);
-              $( this ).remove();
-            });
+            if(ID[0]=='a'&&matris[indis[0]][indis[1]] == true){
+            aciklama = document.getElementById(ID);
+            editStart();
+            }
+            function editStart() {
+
+              area = document.createElement("INPUT");
+              area.setAttribute("type", "text");
+              area.className = 'edit';
+              area.value = aciklama.innerHTML;
+
+              area.onkeydown = function(event) {
+                if (event.key == 'Enter') {
+                  this.blur();
+                }
+              };
+
+              area.onblur = function() {
+                editEnd();
+              };
+
+              aciklama.replaceWith(area);
+              area.focus();
+            }
+
+            function editEnd() {
+              aciklama.innerHTML = area.value;
+              area.replaceWith(aciklama);
+            }
         });
         $('#otomatikguncellebutton').on('click', function(){
             $.ajax({
