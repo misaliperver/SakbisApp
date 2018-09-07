@@ -271,11 +271,11 @@ module.exports.post_dersProgramGrubIdIndex = function (req, res){
         let bitis_date=results.grup.finishTime;
         let hafta_sayisi=Date.daysBetween(donembasi, baslangic_date);//donem basi- etkinliğin başlangıç tarihi bize kaçıncı haftada olduğunu  döndürür
         hafta_sayisi=Math.floor((hafta_sayisi/7));
-        let etkinlik_hafta_araligi=Date.daysBetween(baslangic_date, bitis_date);//etkinliğin baslangic tarihinden bitis tarihi cikarilir.
-        etkinlik_hafta_araligi=Math.floor((etkinlik_hafta_araligi/7));
-        etkinlik_hafta_araligi=etkinlik_hafta_araligi+1;
-        console.log("HAFTA SAYİSİ  "+hafta_sayisi);
-        console.log("etkinlik_hafta_araligi SAYİSİ  "+etkinlik_hafta_araligi);
+        let etkinlik_hafta_araligi = Date.daysBetween(baslangic_date, bitis_date);//etkinliğin baslangic tarihinden bitis tarihi cikarilir.
+        etkinlik_hafta_araligi = Math.floor((etkinlik_hafta_araligi/7));
+        etkinlik_hafta_araligi = etkinlik_hafta_araligi+1;
+        console.log("HAFTA SAYİSİ  " + hafta_sayisi);
+        console.log("etkinlik_hafta_araligi SAYİSİ  " + etkinlik_hafta_araligi);
 
         dersprogramlari = new Array(results.grup.people.length);//grupdaki insanların sayısı kadar
         for(let i=0;i<results.grup.people.length;i++)
@@ -283,7 +283,7 @@ module.exports.post_dersProgramGrubIdIndex = function (req, res){
           dersprogramlari[i]=new Array(etkinlik_hafta_araligi);
           for(let j=0;j<etkinlik_hafta_araligi;j++)
           {
-            dersprogramlari[i][j]=results.dersprogramlariARRAY[i].matris[hafta_sayisi+j];
+            dersprogramlari[i][j] = results.dersprogramlariARRAY[i].matris[hafta_sayisi+j];
 
           }
             //baslangic tarihine bakıp programın belli bölgesi çekilebilir
