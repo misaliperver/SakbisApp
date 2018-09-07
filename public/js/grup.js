@@ -1,5 +1,3 @@
-var windowLoc = $(location).attr('pathname');
-if(windowLoc !== '/userApp/dersprogramiekle'){
 $(document).ready(function(){
     let selector = new Array(-1,-1);
 
@@ -181,10 +179,9 @@ $(document).ready(function(){
                 alert('olusturuldu');
             },
             error: function() {
-
+  
             }
         });
       }
     });//duyuru onayla son
 });
-}
