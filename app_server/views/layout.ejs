@@ -5,7 +5,7 @@
   <title>SakbisApp</title>
   <link rel="stylesheet" href="/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/style.css">
-  <link rel="shortcut icon" href="/img/logo.png" />
+  <link rel="shortcut icon" href="/img/logo.png" />   
 </head>
 <body>
     <div class="modal fade" id="Kullanimsartlari" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -25,7 +25,7 @@
                 Sahte program doldurma, insanları trolleyerek ekleme gibi <br>
                 uygulamanın işlevi dışında kullanımı tespit edilen kullanıcılar<br>
                 moderatörlerimiz tarafından banlanacaktır.
-
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
@@ -38,10 +38,10 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-
-
+        
+        
         <a class="navbar-brand" href="/"><img src="/img/logo.png"/>SakbisApp</a>
-
+      
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item active">
@@ -57,7 +57,7 @@
             </li>
           </ul>
 
-
+          <form class="form-inline my-2 my-lg-0  mr-3" action="/userApp/search/">
             <% if(user){%>
               <div class="dropdown">
                 <button class="btn btn-outline-light" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -70,7 +70,7 @@
               </div>
 
               <div>
-               <form class="form-inline my-2 my-lg-0  mr-3" action="/userApp/search/">
+               
               </div>
                   <input name="searchbyPeer" list="searchbyPeerLIST" type="search" class="form-control" id="searchbyPeer" placeholder="Biriyle karşılaştır...">
                   <datalist id="searchbyPeerLIST">
@@ -87,7 +87,7 @@
               <a class="btn btn-success my-2 my-sm-0" type="submit" href="/L/kayitol">Kayıt Ol</a>
             <% } %>
           </form>
-
+          
         </div>
       </nav>
     <%- body %>
@@ -96,7 +96,7 @@
   <script type="application/javascript" src="/js/jquery-3.3.1.min.js"></script>
   <script type="application/javascript" src="/js/jquery-1.10.2.min.js"></script>
   <script src="/js/bootstrap.min.js"></script>
-  <script src="/js/jquery.cookie.js"></script>
+  <script src="/js/jquery.cookie.js"></script>  
   <script type='text/javascript' src="/js/main.js"></script>
   <script type='text/javascript' src="/js/grup.js"></script>
   <script type='text/javascript' src="/js/heyjax.js"></script>

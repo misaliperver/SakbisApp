@@ -61,14 +61,10 @@ module.exports.put_Ajax_dersProgramiEkle = function(req, res){
     var date = Date.now();
     let aciklama= req.body.aciklama;
     var msg = "";
-    let haftalar =new Array(14);
-    for(let i=0;i<haftalar.length;i++){
-      haftalar[i]=matris;
-    }
         Matris.findOne({username: username}, function (err, dersProgrami) {
             if(dersProgrami){
                 Matris.findOneAndUpdate({username: username}, {
-                    matris: haftalar,
+                    matris: matris,
                     aciklama:aciklama,
                     private: private,
                     username: username,
@@ -80,7 +76,7 @@ module.exports.put_Ajax_dersProgramiEkle = function(req, res){
                  });
             }else{
                 var newDersProgrami = new Matris({
-                    matris: haftalar,
+                    matris: matris,
                     aciklama:aciklama,
                     private: private,
                     username: username,
@@ -145,7 +141,7 @@ module.exports.get_profil = function(req, res){
 
 module.exports.get_duyuru=function (req,res) {
     let detaylar = new Array();
-    Duyuru.find(function(err,duyurular){
+  Duyuru.find(function(err,duyurular){
       if(err) throw err;
       if(duyurular.length==0) {
         res.json({lenght:detaylar.length ,detaylar:detaylar});
@@ -159,7 +155,6 @@ module.exports.get_duyuru=function (req,res) {
           let interval=duyurular[a].interval;//2 saatlik bulusma
           let gun=duyurular[a].gun;//perşembe
           let saat=duyurular[a].saat;//9+4ün saatten baslar
-          let hafta=duyurular[a].hafta;//9+4ün saatten baslar
               query={programId: grupID}
               Grup.findOne(query,function(err,grup){
                   if(err) throw err;
@@ -169,7 +164,7 @@ module.exports.get_duyuru=function (req,res) {
                           if(req.user.username==item){
                               flag=true;
                               for(let j=0;j<interval;j++){
-                                  if(matris.matris[hafta][gun][saat+j]){
+                                  if(matris.matris[gun][saat+j]){
                                       flag=true;
                                       break;
                                   }
@@ -178,7 +173,7 @@ module.exports.get_duyuru=function (req,res) {
                                   }
                               }
                               if(!flag){
-                                  detaylar[sayac]={programId:grupID,interval:interval,gun:gun,saat:saat,hafta:hafta}
+                                  detaylar[sayac]={programId:grupID,interval:interval,gun:gun,saat:saat}
                                   sayac++;
                                   console.log("sayac  :"+sayac);
                               }
@@ -200,19 +195,18 @@ module.exports.get_duyuru=function (req,res) {
 module.exports.post_duyuruonayla = function (req, res){
   let matris;
   let aciklama;
-  console.log("IDDDDDDDD POST DUUYURURURU");
 console.log(req.body.id);
 Duyuru.findOne({programId:req.body.id},function(err,duyuru){
   if(err)
   throw err;
   if(duyuru!==null){
   Matris.findOne({username:req.user.username},function(err,dersprogrami){
-    matris=dersprogrami.matris;
-    aciklama=dersprogrami.aciklama;
+matris=dersprogrami.matris;
+aciklama=dersprogrami.aciklama;
     if(err)
     throw err;
     for(let i=0;i<duyuru.interval;i++){
-    matris[duyuru.hafta][duyuru.gun][duyuru.saat+i]=true;
+    matris[duyuru.gun][duyuru.saat+i]=true;
     aciklama[duyuru.gun][duyuru.saat+i]="etkinlik";
   }
   Matris.findOneAndUpdate({username: req.user.username}, {
@@ -223,6 +217,8 @@ Duyuru.findOne({programId:req.body.id},function(err,duyuru){
           throw err;}
 
    });
+
+
     //gun saat interval programId
   });
 }
@@ -241,131 +237,80 @@ const getUser = async (query) => {
    }
   return { grup:grup, dersprogramlariARRAY:dersprogramlariARRAY };
 };
-Date.daysBetween = function( date1, date2 ) {
-  //Get 1 day in milliseconds
-  let one_day=1000*60*60*24;
-
-  // Convert both dates to milliseconds
-  let date1_ms = date1.getTime();
-  let date2_ms = date2.getTime();
-
-  // Calculate the difference in milliseconds
-  let difference_ms = date2_ms - date1_ms;
-  //take out milliseconds
-  difference_ms = difference_ms/1000;
-  difference_ms = difference_ms/60;
-  difference_ms = difference_ms/60;
-  let days = Math.floor(difference_ms/24);
-
-  return days;
-}
 module.exports.post_dersProgramGrubIdIndex = function (req, res){
-    let donembasi=new Date(2018, 6, 2); //2 temmuz 2018
     let dersprogramlari;
     let sayac;
     let saatler;
     let denemedizisi;
     console.log(req.body);
     getUser({ programId: req.body.programId }).then((results)=>{
-        let baslangic_date=results.grup.startTime;
-        let bitis_date=results.grup.finishTime;
-        let hafta_sayisi=Date.daysBetween(donembasi, baslangic_date);//donem basi- etkinliğin başlangıç tarihi bize kaçıncı haftada olduğunu  döndürür
-        hafta_sayisi=Math.floor((hafta_sayisi/7));
-        let etkinlik_hafta_araligi=Date.daysBetween(baslangic_date, bitis_date);//etkinliğin baslangic tarihinden bitis tarihi cikarilir.
-        etkinlik_hafta_araligi=Math.floor((etkinlik_hafta_araligi/7));
-        etkinlik_hafta_araligi=etkinlik_hafta_araligi+1;
-        console.log("HAFTA SAYİSİ  "+hafta_sayisi);
-        console.log("etkinlik_hafta_araligi SAYİSİ  "+etkinlik_hafta_araligi);
-
         dersprogramlari = new Array(results.grup.people.length);//grupdaki insanların sayısı kadar
         for(let i=0;i<results.grup.people.length;i++)
         {
-          dersprogramlari[i]=new Array(etkinlik_hafta_araligi);
-          for(let j=0;j<etkinlik_hafta_araligi;j++)
-          {
-            dersprogramlari[i][j]=results.dersprogramlariARRAY[i].matris[hafta_sayisi+j];
-
-          }
-            //baslangic tarihine bakıp programın belli bölgesi çekilebilir
-            //dersprogramlari[i]=results.dersprogramlariARRAY[i].matris;
+            dersprogramlari[i]=results.dersprogramlariARRAY[i].matris;
         }
         sayac=0;
-        saatler=new Array(etkinlik_hafta_araligi);
-        denemedizisi=new Array(etkinlik_hafta_araligi);//etkinlik kac hafta aralıgındaysa o kadar
+        saatler=new Array(5);
+        denemedizisi=new Array(5);//5  gün
+        //return asenkronIslem3(sonuc2);
         for(let i=0;i<saatler.length;i++)
         {
-            saatler[i]=new Array(5);
-            denemedizisi[i]=new Array(5);//haftanın 5 günü
-
+            saatler[i]=new Array(16-req.body.interval+1);
+            denemedizisi[i]=new Array(16-req.body.interval+1);//15 saaat
             for(let j=0;j<denemedizisi[i].length;j++)
             {
-                saatler[i][j]=new Array(16-req.body.interval+1);
-                denemedizisi[i][j]=new Array(16-req.body.interval+1);//15 saaat
-                for(let k=0;k<denemedizisi[i][j].length;k++)
-                {
-                  saatler[i][j][k]=0;//i=hafta j=gün k=saat
-                  denemedizisi[i][j][k]=new Array(results.grup.people.length);//insan sayısı
-                }
-
+                saatler[i][j]=0;
+                denemedizisi[i][j]=new Array(results.grup.people.length);//insan sayısı
             }
         }
         if(req.body.interval!=1){
             let bulusmaSaati=req.body.interval;//buluşma saatine göre belirle
-            let Yenidersprogramlari=new Array(results.grup.people.length);//sıkıstırılmıs ders programı
+            let Yenidersprogramlari=new Array(results.grup.people.length);//sikiştirilmiş ders programı
             for(let i=0;i<dersprogramlari.length;i++)
             {
-                Yenidersprogramlari[i]=new Array(etkinlik_hafta_araligi);
-
+                Yenidersprogramlari[i]=new Array(5);
                 for(let j=0;j<Yenidersprogramlari[i].length;j++)
                 {
-                    Yenidersprogramlari[i][j]=new Array(5);
-                    for(let k=0;k<Yenidersprogramlari[i][j].length;k++)
-                    {
-                      Yenidersprogramlari[i][j][k]=new Array(15-(bulusmaSaati-1));
-                    }
-
+                    Yenidersprogramlari[i][j]=new Array(15-(bulusmaSaati-1));
                 }
             }//yeni ders programi initilaziladim
             //formatlama islemi
-            for(let i=0; i<dersprogramlari.length; i++){//kisi sayisi
-              for(let j=0; j<dersprogramlari[i].length; j++){//hafta
-                //5 gün
-                for(let k=0; k<dersprogramlari[i][j].length; k++){//5 gün
-                    for(let l=0; l<(dersprogramlari[i][j][k].length-bulusmaSaati+1); l++){//saat
+
+            for(let i=0; i<dersprogramlari.length; i++){       //kisi sayisi
+                for(let j=0; j<dersprogramlari[i].length; j++){//5 gün
+                    for(let k=0; k<(dersprogramlari[i][j].length-bulusmaSaati+1); k++){//saat
                         for(let z=0; z<bulusmaSaati; z++){
-                            if(dersprogramlari[i][j][k][l+z]==true){
-                                Yenidersprogramlari[i][j][k][l]=true;
+                            if(dersprogramlari[i][j][k+z]==true)
+                            {
+                                Yenidersprogramlari[i][j][k]=true;
                                 break;
                             }
-                            else{
-                                Yenidersprogramlari[i][j][k][l]=false;
+                            else
+                            {
+                                Yenidersprogramlari[i][j][k]=false;
                             }
                         }
                     }
                 }
             }
-          }
             dersprogramlari=Yenidersprogramlari;
         }
-
-        for (let i = 0; i<dersprogramlari[0].length; i++) {//hafta sayisi //5 gün sayisi
-            for(let j=0; j<dersprogramlari[0][0].length; j++){//5 gün //16 saat sayisi
-              for(let k=0;k<dersprogramlari[0][0][0].length;k++){//16 saat
-                for(let z=0; z<dersprogramlari.length; z++){//2 kisi sayisi
-                    if(!dersprogramlari[z][i][j][k]){
+        for (let i = 0; i<dersprogramlari[0].length; i++) {//5 gün sayisi
+            for(let j=0; j<dersprogramlari[0][0].length; j++){//16 saat sayisi
+                for(let k=0; k<dersprogramlari.length; k++){//2 kisi sayisi
+                    if(!dersprogramlari[k][i][j]){
                         sayac++;
-                        denemedizisi[i][j][k][z]=results.grup.people[z];
+                        denemedizisi[i][j][k]=results.grup.people[k];
                     }else{
-                        denemedizisi[i][j][k][z]='$';
+                        denemedizisi[i][j][k]='$';
                     }
                 }
-                saatler[i][j][k]=sayac;
+                saatler[i][j]=sayac;
                 sayac=0;
-                }
             }
         }
         var result = denemedizisi.filter(eleman => !isNaN(eleman));
-        console.log(saatler); //console.log(denemedizisi);console.log(result); ŞİMDİLİK ŞU KİMLERİN GELDİĞİ KISMI KALSIN
+        console.log(saatler); console.log(denemedizisi);console.log(result);
         res.json({saatler:saatler, matris:denemedizisi, result:result, toplamKisi: results.grup.people.length});
     });//then fonksiyonunun sonu
 }
@@ -398,9 +343,7 @@ module.exports.get_dersProgramGrubOlustur = function(req, res){
     var fbugun = bugun.toJSON();
     res.render('PrivateApp/GrupProgrami/olustur', {ras: ran, date: fbugun.substring(0,16)});
 }
-
 module.exports.post_dersProgramGrubOlustur = function(req, res){
-
     let username = req.user.username;
     let title = req.body.title;
     let issue = req.body.issue;

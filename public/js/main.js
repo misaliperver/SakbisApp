@@ -49,7 +49,7 @@ if(windowLoc === '/userApp/dersprogramiekle'){
                             else if(j==13) index='D';
                             else if(j==14) index='E';
                             else if(j==15) index='F';
-
+                            
                             if(j<10) line = 't'+ j  + i;
                             else line = 't'+ index + i;
                             if(matris[i][j]===true)
@@ -169,7 +169,23 @@ else if(windowLoc === '/userApp/Profil'){
 }
 
 
+  $('#duyurular').on('click', function(){
+    let id = event.target.id;
+    console.log(id);
+$.ajax({
+   url: '/userApp/duyuruonayla',
+   method: 'POST',
+   contentType: 'application/json',
+   data: JSON.stringify({id: id}),
+   success: function(response) {
+       console.log(response);
 
+   },
+   error: function() {
+
+   }
+});
+});
 // $.ajax({
 //      url: '/profil/duyuru',
 //      method: 'GET',
