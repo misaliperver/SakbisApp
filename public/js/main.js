@@ -171,7 +171,7 @@ if(windowLoc === '/userApp/dersprogramiekle'){
                 }
             });
         })
-        $("#btn_matrisGonder").on('click',function(){
+        $("#btn_matrisGonder").on('click',(function(){
             $.ajax({
                 url: '/userApp/dersprogramiekle',
                 method: 'PUT',
@@ -185,7 +185,7 @@ if(windowLoc === '/userApp/dersprogramiekle'){
                     alert('Kaldedilemedi!')
                 }
             });
-        });
+        }));
 
     });
 }
@@ -193,10 +193,8 @@ else if(windowLoc === '/userApp/Profil'){
     $(document).ready(function(){
 
 
-        let tumdP;
         var matris = new Array();
         let aciklama_matris;
-        let secili_tarih=new Date();
         function matrisKur(){
             console.log('a');
             matris[0] = new Array(false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false)
@@ -248,30 +246,8 @@ else if(windowLoc === '/userApp/Profil'){
                 aciklama_matris=aciklamakur();
                 console.log(aciklama_matris);
               }
-
-              //  tumdPKur();
-                tumdP=response.dersProgrami;
-
                if(response.dersProgrami!==null){
-                 let donembasi=new Date(2018, 6, 2); //2 temmuz 2018
-                  let bugun=new Date();//bugunun tarihi
-                  bugun= Date.now();
-                  let date1_ms = donembasi.getTime();
-                  //let date2_ms = bugun.getTime();
-
-                  // Calculate the difference in milliseconds
-                  let difference_ms = bugun - date1_ms;
-                  //take out milliseconds
-                  difference_ms = difference_ms/1000;
-                  difference_ms = difference_ms/60;
-                  difference_ms = difference_ms/60;
-                  difference_ms=difference_ms/24;
-                  let week = Math.floor(difference_ms/7);
-                  if(week<14)
-                    matris = response.dersProgrami[week];
-                    else {
-                      matris = response.dersProgrami[13];
-                    }
+                    matris = response.dersProgrami;
                     let line="";
                     let index ="";
                     for(var i=0; i<5; i++){
@@ -307,75 +283,6 @@ else if(windowLoc === '/userApp/Profil'){
                 alert("Server'la bağlantı kurulamadı!")
             }
         });
-            $("#date_kontrol").on('click',function(){
-              if(secili_tarih!=null){
-
-                console.log("secili tarh  "+secili_tarih);
-                    if(event.target.id=="ileri")
-                    {        console.log("secili tarh get1 "+tumdP);
-                      let day=secili_tarih.getDate();
-
-                      day=day+7;
-                      secili_tarih.setDate(day);
-                      console.log("secili tarh  get2  "+secili_tarih);
-                    }
-                    if(event.target.id=="geri")
-                    {
-                      secili_tarih.setDate(secili_tarih.getDate()-7);
-
-                    }
-                    let donembasi=new Date(2018, 6, 2); //2 temmuz 2018
-
-                     let date1_ms = donembasi.getTime();
-                     //let date2_ms = bugun.getTime();
-                     console.log("secili tarh 3 "+secili_tarih);
-                     // Calculate the difference in milliseconds
-                     let difference_ms = secili_tarih - date1_ms;
-                     //take out milliseconds
-                     difference_ms = difference_ms/1000;
-                     difference_ms = difference_ms/60;
-                     difference_ms = difference_ms/60;
-                     difference_ms=difference_ms/24;
-                     let week = Math.floor(difference_ms/7);
-                     if(week<14)
-                       matris = tumdP[week];
-                       else {
-                         matris = tumdP[13];
-                       }
-                       console.log("SU haftaya bakiliyor  "+week);
-                       console.log("matriss"+matris);
-                       let line="";
-                       let index ="";
-                       for(var i=0; i<5; i++){
-                           for(var j=0; j<16; j++){
-                               if(j==10) index='A';
-                               else if(j==11) index='B';
-                               else if(j==12) index='C';
-                               else if(j==13) index='D';
-                               else if(j==14) index='E';
-                               else if(j==15) index='F';
-
-                               if(j<10) line = 't'+ j  + i;
-                               else line = 't'+ index + i;
-                               if(matris[i][j]===true)
-                               $("#"+line).css("background-color", "yellow");
-
-                               if(typeof aciklama_matris[i]!='undefined'){
-                                 if(typeof aciklama_matris[i][j]!='undefined'&&aciklama_matris[i][j]!=null&&matris[i][j]==true)
-                                 $("#"+line).text(aciklama_matris[i][j]);
-                               }
-                                 else{
-                                 //    $("#"+line).text("aciklama");
-                                 }
-                           }
-                     }
-
-              }
-
-
-
-            });
-
 
 
     });

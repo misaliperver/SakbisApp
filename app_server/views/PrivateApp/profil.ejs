@@ -53,10 +53,6 @@
                         </table>
                     </div>
                     <div class="row" style="margin-top:-18px;height: 300px; overflow: auto">
-                      <div class="row" id="date_kontrol">
-                      <button id="geri">geri</button>
-                      <button id="ileri">ileri</button>
-                    </div>
                             <table class="table">
                                 <tbody id="peerTableMatris">
                                     <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">07:00</th> <td id="t00" class="col-2">   </td> <td id="t01" class="col-2">   </td> <td id="t02" class="col-2">   </td> <td id="t03" class="col-2">   </td> <td id="t04" class="col-2">   </td></tr>
@@ -79,5 +75,20 @@
                             </table>
                         </div>
         </div>
+    </div>
+    <div class="row" id="duyurular">
+        <h6>duyurular</h6>
+        <ul class="list-group">
+        <% if(typeof detaylar !== 'undefined'){%>
+          <% detaylar.forEach(function(detaylar) {%>
+                 <li class="list-group-item">
+                   <a class="text-primary"><%= detaylar.grupID %> </a>
+                   <a class="text-danger"><%= detaylar.gun %> <%= detaylar.saat %></a>
+                 <a class="text-primary"><%= detaylar.interval %> </a></li>
+                 <button type="button" id="<%=detaylar.programId%>">Onayla</button>
+
+              <% }); %>
+        <% }%>
+        </ul>
     </div>
 </div>
