@@ -45,10 +45,6 @@
         </div>
         <!-- Process2-Alanı -->
         <div class="tab-pane fade" id="Process2-Tab" role="tabpanel" aria-labelledby="nav-Process2">
-            <div class="row">
-            <div id="date_kontrol" class="bg-primary"><a id="bugunnn" class="text-light"></a><script>document.getElementById("bugunnn").innerText= new Date()</script><button class="btn btn-warning ml-2" id="geri"><</button><button class="btn btn-warning ml-2" id="ileri">></button> </div>
-                    
-            </div>
                 <div class="row">
                         <table class="table">
                             <thead class="bg-success">
@@ -57,9 +53,13 @@
                         </table>
                     </div>
                     <div class="row" style="margin-top:-18px;height: 300px; overflow: auto">
-                      
+                      <div class="row" id="date_kontrol">
+                      <button id="geri">geri</button>
+                      <button id="ileri">ileri</button>
+                    </div>
                             <table class="table">
                                 <tbody id="peerTableMatris">
+                                    <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">07:00</th> <td id="t00" class="col-2">   </td> <td id="t01" class="col-2">   </td> <td id="t02" class="col-2">   </td> <td id="t03" class="col-2">   </td> <td id="t04" class="col-2">   </td></tr>
                                     <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">08:00</th> <td id="t10" class="col-2">   </td> <td id="t11" class="col-2">   </td> <td id="t12" class="col-2">   </td> <td id="t13" class="col-2">   </td> <td id="t14" class="col-2">   </td></tr>
                                     <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">09:00</th> <td id="t20" class="col-2">   </td> <td id="t21" class="col-2">   </td> <td id="t22" class="col-2">   </td> <td id="t23" class="col-2">   </td> <td id="t24" class="col-2">   </td></tr>
                                     <tr class="d-flex"><th class="col-2 bg-secondary text-light" scope="row">10:00</th> <td id="t30" class="col-2">   </td> <td id="t31" class="col-2">   </td> <td id="t32" class="col-2">   </td> <td id="t33" class="col-2">   </td> <td id="t34" class="col-2">   </td></tr>

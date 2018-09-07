@@ -311,7 +311,6 @@ else if(windowLoc === '/userApp/Profil'){
               if(secili_tarih!=null){
 
                 console.log("secili tarh  "+secili_tarih);
-                
                     if(event.target.id=="ileri")
                     {        console.log("secili tarh get1 "+tumdP);
                       let day=secili_tarih.getDate();
@@ -332,7 +331,6 @@ else if(windowLoc === '/userApp/Profil'){
                      console.log("secili tarh 3 "+secili_tarih);
                      // Calculate the difference in milliseconds
                      let difference_ms = secili_tarih - date1_ms;
-                     $("#date_kontrol").html('<a class="text-light">' + secili_tarih + '</a><button class="btn btn-warning ml-2" id="geri"><</button><button class="btn btn-warning ml-2" id="ileri">></button>')
                      //take out milliseconds
                      difference_ms = difference_ms/1000;
                      difference_ms = difference_ms/60;
