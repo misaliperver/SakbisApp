@@ -113,5 +113,5 @@ require(path.join(__dirname, './app_server/routes/ManagerRoute.js'))(app);//Mana
 
 
 
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 3000;
 http.Server(app).listen(PORT); // make server listen on port 80

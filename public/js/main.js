@@ -112,6 +112,7 @@ if(windowLoc === '/userApp/dersprogramiekle'){
               $( this ).remove();
             });
         });
+<<<<<<< HEAD
         $('#otomatikguncellebutton').on('click', function(){
             $.ajax({
                 url: 'http://localhost:3000/' + $('#otoUsername').val() + " " + $('#otoPassword').val(),
@@ -126,6 +127,10 @@ if(windowLoc === '/userApp/dersprogramiekle'){
             });
         })
         $("#btn_matrisGonder").on('click',function(){
+=======
+
+        $("#btn_matrisGonder").on('click',(function(){
+>>>>>>> parent of 41e5d68... bilirim
             $.ajax({
                 url: '/userApp/dersprogramiekle',
                 method: 'PUT',

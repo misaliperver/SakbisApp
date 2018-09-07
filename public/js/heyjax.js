@@ -1,24 +1,5 @@
 
 $(document).ready(function(){
-    $.ajax({
-        url: '/userApp/duyuru',
-        method: 'GET',
-        dataType:'json',
-        success: function(response){
-            console.log(response)
-            duyurular = response.detaylar;
-            $('#duyurusayisi').text(response.lenght)
-            for(let k in duyurular){    
-                $('#dropduyuru').append('<a id='+ duyurular[k]['programId'] +' class="dropdown-item" href="/userApp/grupgirisi/this/?grupGirisi='+ duyurular[k]['programId']+'">'+'<small class="text-primary"> saat:'+duyurular[k]['saat']  +':00</small><small class="text-danger"> '+
-                duyurular[k]['interval']+ 'saat için.</small><br>'+ duyurular[k]['programId'] +'<br><button id="duyuruonayla" class="btn btn-outline-success mr-1">Onayla</button><button id="duyuruayril" class="btn btn-outline-danger ">Ayril</button></a>')
-            }
-           
-        }
-    })
-
-
-
-
     $('#searchbyPeer').keypress(function(e){
         $.ajax({
             url: '/userApp/searchtoPeer/' + $('#searchbyPeer').val() + String.fromCharCode(e.which),
