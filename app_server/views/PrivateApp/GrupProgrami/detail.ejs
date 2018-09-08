@@ -34,6 +34,10 @@
                         </thead>
                     </table>
                     <div style="margin-top:-18px;height: 295px; overflow: auto">
+                      <div class="row" id="date_kontrol_detail">
+                      <button id="detail_geri">geri</button>
+                      <button id="detail_ileri">ileri</button>
+                    </div>
                             <table class="table">
                                 <tbody id="tableMatris">
                                     <%for(var i=0; i<16-parseInt(grup.interval); i++){%>
@@ -52,7 +56,7 @@
                                                 if(i<10) gline = 't'+ i +''+ j;
                                                 else gline = 't'+ gindex + j; %>
 
-                                   <td <div id='<%=gline%>' class='col-2'  >>n1</div></td>
+                                   <td <div id='<%=gline%>' class='col-2' >>n1</div></td>
 
                                     <%}%>
 

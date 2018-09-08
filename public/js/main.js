@@ -29,7 +29,7 @@ if(windowLoc === '/userApp/dersprogramiekle'){
             success: function(response){
               if(response.aciklama!= undefined && response.aciklama.length > 0)
               {
-                  aciklama_matris=response.aciklama;
+                  aciklama_matris=response.aciklama[0];
 
                 console.log(aciklama_matris);
               }
@@ -56,7 +56,7 @@ if(windowLoc === '/userApp/dersprogramiekle'){
                             $("#t"+line).css("background-color", "yellow");
                             $("#b"+line).prop('checked', true);
                             }
-                            if(typeof aciklama_matris[i]!='undefined'){
+                            if(typeof aciklama_matris[i]!='undefined'&&aciklama_matris[i]!=null){
                               if(typeof aciklama_matris[i][j]!='undefined'&&aciklama_matris[i][j]!=null)
                               if(matris[i][j]==true)
                               $("#a"+line).text(aciklama_matris[i][j]);
@@ -155,6 +155,7 @@ if(windowLoc === '/userApp/dersprogramiekle'){
 
             function editEnd() {
               aciklama.innerHTML = area.value;
+              aciklama_matris[indis[0]][indis[1]]=area.value
               area.replaceWith(aciklama);
             }
         });
@@ -194,6 +195,7 @@ else if(windowLoc === '/userApp/Profil'){
 
 
         let tumdP;
+        let aciklamalar;
         var matris = new Array();
         let aciklama_matris;
         let secili_tarih=new Date();
@@ -208,6 +210,7 @@ else if(windowLoc === '/userApp/Profil'){
         }
         function aciklamakur(){
                 let aciklama_matris=new Array();
+
                 aciklama_matris[0] = new Array(16);
                 aciklama_matris[1] = new Array(16);
                 aciklama_matris[2] = new Array(16);
@@ -231,152 +234,174 @@ else if(windowLoc === '/userApp/Profil'){
 //      }
 //  });
 
-       $.ajax({
-            url: '/userApp/dersprogramivarmi',
-            method: 'GET',
-            dataType: 'json',
-            success: function(response){
-              console.log(response.aciklama);
+         $.ajax({
+              url: '/userApp/dersprogramivarmi',
+              method: 'GET',
+              dataType: 'json',
+              success: function(response){
+                let donembasi=new Date(2018, 6, 2); //2 temmuz 2018
+                 let bugun=new Date();//bugunun tarihi
+                 bugun= Date.now();
+                 let date1_ms = donembasi.getTime();
+                 //let date2_ms = bugun.getTime();
 
-              if(response.aciklama!= undefined && response.aciklama.length > 0)
-              {
-                  aciklama_matris=response.aciklama;
-
-                console.log(aciklama_matris);
-              }
-              else {
-                aciklama_matris=aciklamakur();
-                console.log(aciklama_matris);
-              }
-
-              //  tumdPKur();
-                tumdP=response.dersProgrami;
-
-               if(response.dersProgrami!==null){
-                 let donembasi=new Date(2018, 6, 2); //2 temmuz 2018
-                  let bugun=new Date();//bugunun tarihi
-                  bugun= Date.now();
-                  let date1_ms = donembasi.getTime();
-                  //let date2_ms = bugun.getTime();
-
-                  // Calculate the difference in milliseconds
-                  let difference_ms = bugun - date1_ms;
-                  //take out milliseconds
-                  difference_ms = difference_ms/1000;
-                  difference_ms = difference_ms/60;
-                  difference_ms = difference_ms/60;
-                  difference_ms=difference_ms/24;
-                  let week = Math.floor(difference_ms/7);
-                  if(week<14)
-                    matris = response.dersProgrami[week];
-                    else {
-                      matris = response.dersProgrami[13];
-                    }
-                    let line="";
-                    let index ="";
-                    for(var i=0; i<5; i++){
-                        for(var j=0; j<16; j++){
-                            if(j==10) index='A';
-                            else if(j==11) index='B';
-                            else if(j==12) index='C';
-                            else if(j==13) index='D';
-                            else if(j==14) index='E';
-                            else if(j==15) index='F';
-
-                            if(j<10) line = 't'+ j  + i;
-                            else line = 't'+ index + i;
-                            if(matris[i][j]===true)
-                            $("#"+line).css("background-color", "yellow");
-
-                            if(typeof aciklama_matris[i]!='undefined'){
-                              if(typeof aciklama_matris[i][j]!='undefined'&&aciklama_matris[i][j]!=null&&matris[i][j]==true)
-                              $("#"+line).text(aciklama_matris[i][j]);
-                            }
-                              else{
-                              //    $("#"+line).text("aciklama");
-                              }
-                        }
+                 // Calculate the difference in milliseconds
+                 let difference_ms = bugun - date1_ms;
+                 //take out milliseconds
+                 difference_ms = difference_ms/1000;
+                 difference_ms = difference_ms/60;
+                 difference_ms = difference_ms/60;
+                 difference_ms=difference_ms/24;
+                 let week = Math.floor(difference_ms/7);
+                 if(week<14){
+                   week=week;
+                 }
+                   else {
+                     week=13;
+                   }
+                if(response.aciklama!= undefined && response.aciklama.length > 0)
+                {
+                  aciklama_matris=response.aciklama[week];
+                  aciklamalar=response.aciklama;
+                }
+                else {
+                  aciklama_matris=aciklamakur();
+                  for (let i = 0; i < 14; i++) {
+                    aciklamalar[i]=aciklama_matris
                   }
-}
+                  console.log(aciklama_matris);
+                }
 
-               else{
-                matrisKur();
-               }
-            },
-            error: function() {
-                alert("Server'la bağlantı kurulamadı!")
-            }
-        });
-            $("#date_kontrol").on('click',function(){
-              if(secili_tarih!=null){
-
-                console.log("secili tarh  "+secili_tarih);
-                    if(event.target.id=="ileri")
-                    {        console.log("secili tarh get1 "+tumdP);
-                      let day=secili_tarih.getDate();
-
-                      day=day+7;
-                      secili_tarih.setDate(day);
-                      console.log("secili tarh  get2  "+secili_tarih);
+                //  tumdPKur();
+                  tumdP=response.dersProgrami;
+                 if(response.dersProgrami!==null){
+                    if(week<14){
+                      matris = response.dersProgrami[week];
                     }
-                    if(event.target.id=="geri")
-                    {
-                      secili_tarih.setDate(secili_tarih.getDate()-7);
+                      else {
+                        matris = response.dersProgrami[13];
+                      }
+                      let line="";
+                      let index ="";
+                      for(var i=0; i<5; i++){
+                          for(var j=0; j<16; j++){
+                              if(j==10) index='A';
+                              else if(j==11) index='B';
+                              else if(j==12) index='C';
+                              else if(j==13) index='D';
+                              else if(j==14) index='E';
+                              else if(j==15) index='F';
 
+                              if(j<10) line = 't'+ j  + i;
+                              else line = 't'+ index + i;
+                              if(matris[i][j]===true){
+                              $("#"+line).css("background-color", "yellow");
+                            }
+                            else {
+
+                            }
+                              if (typeof aciklama_matris!='undefined'&&aciklama_matris!=null) {
+
+
+                              if(typeof aciklama_matris[i]!='undefined'&&aciklama_matris[i]!=null){
+                              if(typeof aciklama_matris[i]!='undefined'){
+                                if(typeof aciklama_matris[i][j]!='undefined'&&aciklama_matris[i][j]!=null&&matris[i][j]==true)
+                                $("#"+line).text(aciklama_matris[i][j]);
+                              }
+                            }
+                              }
+                                else{
+                                //    $("#"+line).text("aciklama");
+                                }
+                          }
                     }
-                    let donembasi=new Date(2018, 6, 2); //2 temmuz 2018
-
-                     let date1_ms = donembasi.getTime();
-                     //let date2_ms = bugun.getTime();
-                     console.log("secili tarh 3 "+secili_tarih);
-                     // Calculate the difference in milliseconds
-                     let difference_ms = secili_tarih - date1_ms;
-                     //take out milliseconds
-                     difference_ms = difference_ms/1000;
-                     difference_ms = difference_ms/60;
-                     difference_ms = difference_ms/60;
-                     difference_ms=difference_ms/24;
-                     let week = Math.floor(difference_ms/7);
-                     if(week<14)
-                       matris = tumdP[week];
-                       else {
-                         matris = tumdP[13];
-                       }
-                       console.log("SU haftaya bakiliyor  "+week);
-                       console.log("matriss"+matris);
-                       let line="";
-                       let index ="";
-                       for(var i=0; i<5; i++){
-                           for(var j=0; j<16; j++){
-                               if(j==10) index='A';
-                               else if(j==11) index='B';
-                               else if(j==12) index='C';
-                               else if(j==13) index='D';
-                               else if(j==14) index='E';
-                               else if(j==15) index='F';
-
-                               if(j<10) line = 't'+ j  + i;
-                               else line = 't'+ index + i;
-                               if(matris[i][j]===true)
-                               $("#"+line).css("background-color", "yellow");
-
-                               if(typeof aciklama_matris[i]!='undefined'){
-                                 if(typeof aciklama_matris[i][j]!='undefined'&&aciklama_matris[i][j]!=null&&matris[i][j]==true)
-                                 $("#"+line).text(aciklama_matris[i][j]);
-                               }
-                                 else{
-                                 //    $("#"+line).text("aciklama");
-                                 }
-                           }
-                     }
-
+                        }
+                 else{
+                  matrisKur();
+                 }
+              },
+              error: function() {
+                  alert("Server'la bağlantı kurulamadı!")
               }
+          });
+              $("#date_kontrol").on('click',function(){
+                if(secili_tarih!=null){
+
+                      console.log("secili tarh  "+secili_tarih);
+                      if(event.target.id=="ileri")
+                      {
+
+                        let day=secili_tarih.getDate();
+                        day=day+7;
+                        secili_tarih.setDate(day);
+                        console.log("secili tarh  get2  "+secili_tarih);
+                      }
+                      if(event.target.id=="geri")
+                      {
+                        secili_tarih.setDate(secili_tarih.getDate()-7);
+
+                      }
+                      let donembasi=new Date(2018, 6, 2); //2 temmuz 2018
+
+                       let date1_ms = donembasi.getTime();
+                       //let date2_ms = bugun.getTime();
+                       console.log("secili tarh 3 "+secili_tarih);
+                       // Calculate the difference in milliseconds
+                       let difference_ms = secili_tarih - date1_ms;
+                       //take out milliseconds
+                       difference_ms = difference_ms/1000;
+                       difference_ms = difference_ms/60;
+                       difference_ms = difference_ms/60;
+                       difference_ms=difference_ms/24;
+                       let week = Math.floor(difference_ms/7);
+                       if(week<14){
+                         matris = tumdP[week];
+                         aciklama_matris=aciklamalar[week];
+                       }
+                         else {
+                           matris = tumdP[13];
+                            aciklama_matris=aciklamalar[13];
+                            week=13;
+                         }
+                         console.log("SU haftaya bakiliyor  "+week);
+                         console.log("matriss"+matris);
+                         let line="";
+                         let index ="";
+                         for(var i=0; i<5; i++){
+                             for(var j=0; j<16; j++){
+                                 if(j==10) index='A';
+                                 else if(j==11) index='B';
+                                 else if(j==12) index='C';
+                                 else if(j==13) index='D';
+                                 else if(j==14) index='E';
+                                 else if(j==15) index='F';
+
+                                 if(j<10) line = 't'+ j  + i;
+                                 else line = 't'+ index + i;
+                                 if(matris[i][j]===true){
+                                 $("#"+line).css("background-color", "yellow");
+                               }
+                               else {
+                                 $("#"+line).css("background-color", "");
+                                   $("#"+line).text("");
+                               }
+                                 if(typeof aciklama_matris[i]!='undefined'){
+                                   if(typeof aciklama_matris[i][j]!='undefined'&&aciklama_matris[i][j]!=null&&matris[i][j]==true)
+                                   $("#"+line).text(aciklama_matris[i][j]);
+                                 }
+                                   else{
+                                  
+                                   }
+                             }
+                       }
+
+                }
 
 
 
-            });
+              });
 
 
 
-    });
-}
+      });
+  }

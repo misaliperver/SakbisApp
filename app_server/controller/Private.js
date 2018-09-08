@@ -9,12 +9,14 @@ module.exports.put_duyuruolustur= function(req, res){
   let interval  = req.body.interval;
   let gun = req.body.gun;
   let saat= req.body.saat;
+  let hafta=req.body.hafta;
   var msg = "";
       Duyuru.findOne({programId: programId}, function (err, duyuru) {
           if(duyuru){
               Duyuru.findOneAndUpdate({programId: programId}, {
                   programId: programId,
                   interval:interval,
+                  hafta:hafta,
                   gun: gun,
                   saat: saat
                 }, function(err, rawResponse) {
@@ -26,6 +28,7 @@ module.exports.put_duyuruolustur= function(req, res){
               var newDuyuru = new Duyuru({
                 programId: programId,
                 interval:interval,
+                hafta:hafta,
                 gun: gun,
                 saat: saat
               });
@@ -49,27 +52,30 @@ module.exports.get_Ajax_dersProgramiEkle = function(req, res){
         if(dersProgrami){
             res.json({dersProgrami: dersProgrami.matris,aciklama:dersProgrami.aciklama});
         }else{
-            res.json({dersProgrami: null});
+            res.json({dersProgrami: null,aciklama:null});
         }
     });
 }
 
 module.exports.put_Ajax_dersProgramiEkle = function(req, res){
-    var matris   = req.body.matris;
-    var private  = req.body.private;
-    var username = req.user.username;
-    var date = Date.now();
+    let matris   = req.body.matris;
+    let private  = req.body.private;
+    let username = req.user.username;
+    let date = Date.now();
     let aciklama= req.body.aciklama;
-    var msg = "";
+    let msg = "";
     let haftalar =new Array(14);
+    let aciklamalar=new Array(14);
     for(let i=0;i<haftalar.length;i++){
       haftalar[i]=matris;
+      aciklamalar[i]=aciklama;
+
     }
         Matris.findOne({username: username}, function (err, dersProgrami) {
             if(dersProgrami){
                 Matris.findOneAndUpdate({username: username}, {
                     matris: haftalar,
-                    aciklama:aciklama,
+                    aciklama:aciklamalar,
                     private: private,
                     username: username,
                     date: date
@@ -81,7 +87,7 @@ module.exports.put_Ajax_dersProgramiEkle = function(req, res){
             }else{
                 var newDersProgrami = new Matris({
                     matris: haftalar,
-                    aciklama:aciklama,
+                    aciklama:aciklamalar,
                     private: private,
                     username: username,
                     date: date
@@ -95,48 +101,8 @@ module.exports.put_Ajax_dersProgramiEkle = function(req, res){
         });
 
 }
-module.exports.put_Ajax_aciklamaEkle = function(req, res){
-    let matris=req.body.matris;
-    let private=req.body.private;
-    let aciklama   = req.body.aciklama;
-    let username = req.user.username;
-    let date = Date.now();
-
-    let msg = "";
-        Matris.findOne({username: username}, function (err, dersProgrami) {
-            if(dersProgrami){
-                Matris.findOneAndUpdate({username: username}, {
-                    matris: matris,
-                    aciklama:aciklama,
-                    private: private,
-                    username: username,
-                    date: date
-                  }, function(err, rawResponse) {
-                    if (err){ msg= 'Güncellenemedi';  throw err;}
-                    else {msg= 'Güncelleme başarılı'; }
-                    res.json({msg});
-                 });
-            }else{
-                var newDersProgrami = new Matris({
-                    matris: matris,
-                    aciklama:aciklama,
-                    private: private,
-                    username: username,
-                    date: date
-                });
-                Matris.createDersProgrami(newDersProgrami, function (err, callbackDersProgrami) {
-                    if (err){ msg = 'Yenisi oluşturululamadı'; throw err; }
-                    else {msg= 'Yeni kayıt oluşturuldu.'; }
-                });
-                res.json({msg});
-            }
-        });
-
-}
-
 module.exports.get_profil = function(req, res){
-    var i=0;
-
+    let i=0;
     if(req.user.username) i++; if(req.user.password) i++;if(req.user.ad)  i++;if(req.user.soyad) i++;
     if(req.user.yas)  i++;if(req.user.userimg)  i++;if(req.user.telno)  i++;
     if(req.user.unibolum) i++;if(req.user.bio)  i++;   if(req.user.cinsiyet)i++;
@@ -198,37 +164,37 @@ module.exports.get_duyuru=function (req,res) {
 
 }
 module.exports.post_duyuruonayla = function (req, res){
-  let matris;
-  let aciklama;
-  console.log("IDDDDDDDD POST DUUYURURURU");
-console.log(req.body.id);
-Duyuru.findOne({programId:req.body.id},function(err,duyuru){
+    let matris;
+    let aciklama;
+    console.log("ID POST DUUYURURURU");
+  console.log(req.body.id);
+  Duyuru.findOne({programId:req.body.id},function(err,duyuru){
   if(err)
   throw err;
   if(duyuru!==null){
-  Matris.findOne({username:req.user.username},function(err,dersprogrami){
-    matris=dersprogrami.matris;
-    aciklama=dersprogrami.aciklama;
-    if(err)
-    throw err;
-    for(let i=0;i<duyuru.interval;i++){
-    matris[duyuru.hafta][duyuru.gun][duyuru.saat+i]=true;
-    aciklama[duyuru.gun][duyuru.saat+i]="etkinlik";
-  }
-  Matris.findOneAndUpdate({username: req.user.username}, {
-      matris: matris,
-      aciklama:aciklama
-    }, function(err, rawResponse) {
-      if (err){
-          throw err;}
+    Matris.findOne({username:req.user.username},function(err,dersprogrami){
+      matris=dersprogrami.matris;
+      aciklama=dersprogrami.aciklama;
+      if(err)
+      throw err;
+      for(let i=0;i<duyuru.interval;i++){
+      matris[duyuru.hafta][duyuru.gun][duyuru.saat+i]=true;
+      aciklama[duyuru.hafta][duyuru.gun][duyuru.saat+i]="etkinlik";
+    }
+      Matris.findOneAndUpdate({username: req.user.username}, {
+        matris: matris,
+        aciklama:aciklama
+        }, function(err, rawResponse) {
+          if (err){
+            throw err;}
 
-   });
-    //gun saat interval programId
-  });
-}
-  });
-res.redirect('/userApp/Profil');
-}
+     });
+      //gun saat interval programId
+    });
+  }
+    });
+    res.redirect('/userApp/Profil');
+  }
 
 const getUser = async (query) => {
   const grup= await Grup.findOne(query);
@@ -256,7 +222,6 @@ Date.daysBetween = function( date1, date2 ) {
   difference_ms = difference_ms/60;
   difference_ms = difference_ms/60;
   let days = Math.floor(difference_ms/24);
-
   return days;
 }
 module.exports.post_dersProgramGrubIdIndex = function (req, res){
@@ -365,8 +330,10 @@ module.exports.post_dersProgramGrubIdIndex = function (req, res){
             }
         }
         var result = denemedizisi.filter(eleman => !isNaN(eleman));
-        console.log(saatler); //console.log(denemedizisi);console.log(result); ŞİMDİLİK ŞU KİMLERİN GELDİĞİ KISMI KALSIN
-        res.json({saatler:saatler, matris:denemedizisi, result:result, toplamKisi: results.grup.people.length});
+        console.log(saatler);
+        //console.log(denemedizisi[0]);
+        //console.log(result); ŞİMDİLİK ŞU KİMLERİN GELDİĞİ KISMI KALSIN
+        res.json({saatler:saatler, matris:denemedizisi, result:result, toplamKisi: results.grup.people.length,hafta:hafta_sayisi,hafta_lenght:etkinlik_hafta_araligi});
     });//then fonksiyonunun sonu
 }
 

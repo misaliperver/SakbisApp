@@ -2,7 +2,10 @@ var windowLoc = $(location).attr('pathname');
 if(windowLoc !== '/userApp/dersprogramiekle'){
 $(document).ready(function(){
     let selector = new Array(-1,-1);
-
+    let hafta;
+    let karsilastirilmis_matris;
+    let kisi_sayisi;
+    let hafta_lenght;
     $('#tableMatris').on('click',function(){
         console.log("selector0  "+selector[0]);
         console.log("selector1  "+selector[1]);
@@ -79,7 +82,7 @@ $(document).ready(function(){
     });
     $(".custom-menu li").click(function(){
         var xtext= "<strong>Gelenler</strong> <i>"+ $("#t"+tableJ+""+tableI).text() +"</i> <br> <ul class='list-group'>";
-        TUMMATRIS[tableI][tableJ].forEach(function(person){
+        TUMMATRIS[hafta_sayac][tableI][tableJ].forEach(function(person){
             if(person !== '$')
             xtext += "<li class='list-group-item'>" + person + "</li>";
         })
@@ -102,18 +105,22 @@ $(document).ready(function(){
             data: JSON.stringify({programId: programID, interval: intervaL}),
             success: function(response) {
                 console.log(response);
+                hafta=response.hafta;
+                hafta_lenght=response.hafta_lenght;
                 TUMMATRIS = response.matris;
+                karsilastirilmis_matris=response.saatler;
+                kisi_sayisi=response.toplamKisi;
                 $('#grupimg').css("display", "none");
                 $('#grupmatris').css("display", "");
                 $('#btn_photo').css("display", "");
                 $('#btn_onayla').css("display", "");
                 $('#btn_Karsilastir').text("Yinele");
 
-                for(var i=0; i<response.saatler.length; i++){
-                    for(var j=0; j<response.saatler[i].length; j++){
+                for(var i=0; i<response.saatler[0].length; i++){
+                    for(var j=0; j<response.saatler[0][i].length; j++){
                         var gline="";
                         var gindex ="";
-                        console.log(response.saatler[i][j])
+                        console.log(response.saatler[0][i][j])
                         if(j==10) gindex='A';
                         else if(j==11) gindex='B';
                         else if(j==12) gindex='C';
@@ -123,7 +130,7 @@ $(document).ready(function(){
 
                             if(j<10) gline = 't'+ j  + i;
                             else gline = 't'+ gindex + i;
-                            var yuzdesi =Math.floor((response.saatler[i][j] / response.toplamKisi) * 100)
+                            var yuzdesi =Math.floor((response.saatler[0][i][j] / response.toplamKisi) * 100)
                             if(yuzdesi==100) $("#"+gline).css("background-color", "#79d37b");
                             else if(yuzdesi<100 && yuzdesi>=90) $("#"+gline).css("background-color", "#9af395");
                             else if(yuzdesi<90 && yuzdesi>=80) $("#"+gline).css("background-color", "#b2b100");
@@ -144,7 +151,55 @@ $(document).ready(function(){
             }
         });
     });
+    let hafta_sayac=0;
+    $("#date_kontrol_detail").on('click',function(){
+      console.log("secili hafta  "+hafta);
+      let interval = $('#interval').text();
+      if(event.target.id=="detail_geri"){
+        if(hafta_sayac>0){
+          hafta=hafta-1;
+          hafta_sayac=hafta_sayac-1;
+          }
+      }
+      if(event.target.id=="detail_ileri"){
+        if(hafta_sayac<hafta_lenght-1){
+        hafta=hafta+1;
+        hafta_sayac=hafta_sayac+1;
+        }
+      }
+      console.log(hafta);
+      console.log(karsilastirilmis_matris);
+      for(let i=0; i<karsilastirilmis_matris[hafta_sayac].length; i++){
+          for(let j=0; j<karsilastirilmis_matris[hafta_sayac][i].length; j++){
+              let gline="";
+              let gindex ="";
+              console.log(karsilastirilmis_matris[hafta_sayac][i][j])
+              if(j==10) gindex='A';
+              else if(j==11) gindex='B';
+              else if(j==12) gindex='C';
+              else if(j==13) gindex='D';
+              else if(j==14) gindex='E';
+              else if(j==15) gindex='F';
 
+                  if(j<10) gline = 't'+ j  + i;
+                  else gline = 't'+ gindex + i;
+                  var yuzdesi =Math.floor((karsilastirilmis_matris[hafta_sayac][i][j] / kisi_sayisi) * 100)
+                  if(yuzdesi==100) $("#"+gline).css("background-color", "#79d37b");
+                  else if(yuzdesi<100 && yuzdesi>=90) $("#"+gline).css("background-color", "#9af395");
+                  else if(yuzdesi<90 && yuzdesi>=80) $("#"+gline).css("background-color", "#b2b100");
+                  else if(yuzdesi<80 && yuzdesi>=70) $("#"+gline).css("background-color", "#ccff66");
+                  else if(yuzdesi<70 && yuzdesi>=60) $("#"+gline).css("background-color", "#ffff66");
+                  else if(yuzdesi<60 && yuzdesi>=50) $("#"+gline).css("background-color", "#ffcc00");
+                  else if(yuzdesi<50 && yuzdesi>=30) $("#"+gline).css("background-color", "#ff9933");
+                  else if(yuzdesi<30 && yuzdesi>=10) $("#"+gline).css("background-color", "#ff6600");
+                  else if(yuzdesi<10 && yuzdesi>=0) $("#"+gline).css("background-color", "#ff0000");
+
+
+                  $("#"+gline).text("%" + yuzdesi);
+          }
+      }
+
+    });
     $('#btn_photo').on('click', function(){
         $('#grupimg').css("display", "");
         $('#grupmatris').css("display", "none");
@@ -171,12 +226,16 @@ $(document).ready(function(){
       var intervaL = $('#interval').text();
       if(selector[0]==-1){
         alert('Önce etkinlik için tablodan tarih seçiniz.')
-      }else{
+      }
+      else if (hafta==null) {
+
+      }
+      else{
         $.ajax({
             url: window.location.pathname,
             type: 'PUT',
             contentType: 'application/json',
-            data: JSON.stringify({programId: programID, interval: intervaL,gun:selector[0],saat:selector[1]}),
+            data: JSON.stringify({programId: programID, interval: intervaL,gun:selector[0],saat:selector[1],hafta:hafta}),
             success: function(response){
                 alert('olusturuldu');
             },

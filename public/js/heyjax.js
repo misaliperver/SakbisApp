@@ -1,6 +1,8 @@
 
 $(document).ready(function(){
-
+  let matris;
+  let matris_peer;
+  let hafta=0;
     $.ajax({
         url: '/userApp/duyuru',
         method: 'GET',
@@ -21,20 +23,20 @@ $(document).ready(function(){
     $('#dropduyuru').on('click', function(){
       let id = event.target.id;//event.target.id;
       console.log(id);
-  $.ajax({
-     url: '/userApp/duyuruonayla',
-     method: 'POST',
-     contentType: 'application/json',
-     data: JSON.stringify({id: id}),
-     success: function(response) {
-         console.log(response);
+      $.ajax({
+         url: '/userApp/duyuruonayla',
+         method: 'POST',
+         contentType: 'application/json',
+         data: JSON.stringify({id: id}),
+         success: function(response) {
+             console.log(response);
 
-     },
-     error: function() {
+         },
+         error: function() {
 
-     }
-  });
-});
+         }
+      });
+    });
 
 
     $('#searchbyPeer').keypress(function(e){
@@ -66,20 +68,34 @@ $(document).ready(function(){
             method: 'GET',
             dataType: 'json',
             success: function(response){
+              matris=response.xusermatris.matris;
+              matris_peer=response.peermatris.matris;
                 console.log(response.xusermatris)
                 var html = "<tr class='d-flex'><th class='col-2 bg-secondary text-light' scope='row'>isimler</th><td id='' class='col-1'>"+response.peer.ad+"</td><td id='' class='col-1'>"+response.xuser.ad+"</td><td id='' class='col-1'>"+response.peer.ad+"</td><td id='' class='col-1'>"+response.xuser.ad+"</td><td id='' class='col-1'>"+response.peer.ad+"</td><td id='' class='col-1'>"+response.xuser.ad+"</td><td id='' class='col-1'>"+response.peer.ad+"</td><td id='' class='col-1'>"+response.xuser.ad+"</td><td id='' class='col-1'>"+response.peer.ad+"</td><td id='' class='col-1'>"+response.xuser.ad+"</td>" ;
                 for(var i=0; i<15; i++){
                     html += "<tr class='d-flex'><th class='col-2 bg-secondary text-light' scope='row'>"+ (i+7) +":00</th>";
                     for(var j=0; j<5; j++){
-                        if(response.peermatris.matris[j][i] == true){
-                            html += "<td id='' class='col-1' style='background-color: green'></td>";
+                      let line="";
+                      let index ="";
+                      if(i==10) index='A';
+                      else if(i==11) index='B';
+                      else if(i==12) index='C';
+                      else if(i==13) index='D';
+                      else if(i==14) index='E';
+                      else if(i==15) index='F';
+
+                      if(j<10) line = ""+ i  + j;
+                      else line = ""+ index + j;
+                        if(response.peermatris.matris[0][j][i] == true){
+
+                            html += "<td id='p"+line+"' class='col-1' style='background-color: green'></td>";
                         }else{
-                            html += "<td id='' class='col-1'  ></td>";
+                            html += "<td id='p"+line+"' class='col-1'  ></td>";
                         }
-                        if(response.xusermatris.matris[j][i] == true){
-                            html += "<td id='' class='col-1'  style='background-color: yellow'></td>";
+                        if(response.xusermatris.matris[0][j][i] == true){
+                            html += "<td id='t"+line+"' class='col-1'  style='background-color: yellow'></td>";
                         }else{
-                            html += "<td id='' class='col-1'></td>";
+                            html += "<td id='t"+line+"' class='col-1'></td>";
                         }
                     }
 
@@ -92,6 +108,54 @@ $(document).ready(function(){
 
             }
         });
+
+    });
+    $("#date_kontrol_peer").on('click',function(){
+      //console.log(hafta);
+      if(event.target.id=="peer_ileri")
+      {
+        if(hafta<14){
+          hafta=hafta+1;
+          }
+      }
+      if(event.target.id=="peer_geri")
+      {
+        if(hafta>0){
+          hafta=hafta-1;
+          }
+      }
+      let line="";
+      let index ="";
+      for(var i=0; i<5; i++){
+          for(var j=0; j<16; j++){
+              if(j==10) index='A';
+              else if(j==11) index='B';
+              else if(j==12) index='C';
+              else if(j==13) index='D';
+              else if(j==14) index='E';
+              else if(j==15) index='F';
+
+              if(j<10) line = ''+ j  + i;
+              else line = ''+ index + i;
+              if(matris[hafta][i][j]===true){
+              $("#t"+line).css("background-color", "yellow");
+            }
+            else {
+              $("#t"+line).css("background-color", "");
+
+            }
+            if(matris_peer[hafta][i][j]===true){
+            $("#p"+line).css("background-color", "green");
+          }
+          else {
+            $("#p"+line).css("background-color", "");
+
+          }
+
+          }
+    }
+
+
     });
 
 

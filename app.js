@@ -12,7 +12,7 @@ var User = require('./app_server/model/user');
 
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/sakbisapp');
+mongoose.connect('mongodb://localhost/sakbisappdeneme');
 var db = mongoose.connection;
 
 
@@ -52,7 +52,7 @@ app.use(expressValidator({
         var namespace = param.split('.')
           , root      = namespace.shift()
           , formParam = root;
-  
+
       while(namespace.length) {
         formParam += '[' + namespace.shift() + ']';
       }
