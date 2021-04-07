@@ -232,7 +232,7 @@ const getUser = async (query) => {
     let i=0;
   for(const item of grup.people){
     query = {username: item};
-    dersprogramlariARRAY[i] = await   Matris.findOne(query);
+    dersprogramlariARRAY[i] = await Matris.findOne(query);
     i++;
    }
   return { grup:grup, dersprogramlariARRAY:dersprogramlariARRAY };
@@ -245,6 +245,7 @@ module.exports.post_dersProgramGrubIdIndex = function (req, res){
     console.log(req.body);
     getUser({ programId: req.body.programId }).then((results)=>{
         dersprogramlari = new Array(results.grup.people.length);//grupdaki insanların sayısı kadar
+        console.log("dersprogramlariARRAY", results.dersprogramlariARRAY)
         for(let i=0;i<results.grup.people.length;i++)
         {
             dersprogramlari[i]=results.dersprogramlariARRAY[i].matris;
@@ -349,7 +350,7 @@ module.exports.post_dersProgramGrubOlustur = function(req, res){
     let issue = req.body.issue;
     let startTime = req.body.startTime;
     let finishTime = req.body.finishTime;
-    let people = req.body.people.split(" ");
+    let people = req.body.people;
     let secret = true;
     if(req.body.secret)  secret = true;
     else secret=false;
@@ -360,6 +361,12 @@ module.exports.post_dersProgramGrubOlustur = function(req, res){
 
     var hatalar = req.validationErrors();
     var interval=0;
+
+    people = people ? people.split(' ') : [];
+    
+    if (people.indexOf(username) === -1) {
+        people.push(username);
+    }
     try{interval = parseInt(req.body.interval);  if(isNaN(interval)) hatalar.push({param:'interval',msg:'Uygun aralık değeri seçiniz.', value:''})}catch(err){
         hatalar.push({param:'interval',msg:'Uygun aralık değeri seçiniz.', value:''})
     }
@@ -467,7 +474,6 @@ module.exports.get_grupGirisi = function(req, res){
     Grup.getGrupLimit(function(err, gruplar){
         if(err) throw err;
 
-        console.log(gruplar[0].title)
         if(gruplar){
             res.render('PrivateApp/grupgirisi',{gruplar: gruplar});
         }
